@@ -1,0 +1,133 @@
+<svg viewBox="0 0 1020 620" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+
+  <rect width="1020" height="620" fill="#F8F9FA" rx="8"/>
+  <text x="510" y="34" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a1a2e">Seeing the Symphony — Data Flow (Sequence)</text>
+  <line x1="40" y1="44" x2="980" y2="44" stroke="#2E75B6" stroke-width="2"/>
+
+  <!-- Lifeline headers -->
+  <rect x="20"  y="54" width="100" height="36" rx="6" fill="#D5E8F0" stroke="#2E75B6" stroke-width="1.5"/>
+  <text x="70"  y="69" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Conductor</text>
+  <text x="70"  y="83" text-anchor="middle" font-size="10" fill="#444">(User)</text>
+
+  <rect x="150" y="54" width="110" height="36" rx="6" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1.5"/>
+  <text x="205" y="69" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Score Parser</text>
+  <text x="205" y="83" text-anchor="middle" font-size="10" fill="#444">Python · music21</text>
+
+  <rect x="285" y="54" width="110" height="36" rx="6" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1.5"/>
+  <text x="340" y="69" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Harm. Analyzer</text>
+  <text x="340" y="83" text-anchor="middle" font-size="10" fill="#444">Python · music21</text>
+
+  <rect x="420" y="54" width="110" height="36" rx="6" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1.5"/>
+  <text x="475" y="69" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Auto-Annotator</text>
+  <text x="475" y="83" text-anchor="middle" font-size="10" fill="#444">Python</text>
+
+  <rect x="555" y="54" width="110" height="36" rx="6" fill="#C9A8D8" stroke="#7B2D8B" stroke-width="1.5"/>
+  <text x="610" y="69" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Coll. Resolver</text>
+  <text x="610" y="83" text-anchor="middle" font-size="10" fill="#555">pre-render pass</text>
+
+  <rect x="690" y="54" width="110" height="36" rx="6" fill="#FCD5B5" stroke="#C05621" stroke-width="1.5"/>
+  <text x="745" y="69" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Authoring UI</text>
+  <text x="745" y="83" text-anchor="middle" font-size="10" fill="#444">React · Konva</text>
+
+  <rect x="858" y="54" width="110" height="36" rx="6" fill="#B7DFC9" stroke="#276749" stroke-width="1.5"/>
+  <text x="913" y="69" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Renderer</text>
+  <text x="913" y="83" text-anchor="middle" font-size="10" fill="#444">Python · Cairo</text>
+
+  <!-- Lifelines -->
+  <line x1="70"  y1="90" x2="70"  y2="595" stroke="#2E75B6" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="205" y1="90" x2="205" y2="595" stroke="#7B2D8B" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="340" y1="90" x2="340" y2="595" stroke="#7B2D8B" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="475" y1="90" x2="475" y2="595" stroke="#7B2D8B" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="610" y1="90" x2="610" y2="595" stroke="#7B2D8B" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="745" y1="90" x2="745" y2="595" stroke="#C05621" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="913" y1="90" x2="913" y2="595" stroke="#276749" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Step 1 -->
+  <text x="22" y="118" font-size="9" fill="#888">① Load</text>
+  <line x1="70" y1="122" x2="203" y2="122" stroke="#2E75B6" stroke-width="1.5" marker-end="url(#s1)"/>
+  <text x="137" y="118" text-anchor="middle" font-size="10" fill="#1a1a2e">upload MusicXML</text>
+
+  <!-- Step 2 -->
+  <text x="22" y="147" font-size="9" fill="#888">② Parse</text>
+  <line x1="205" y1="151" x2="338" y2="151" stroke="#7B2D8B" stroke-width="1.5" marker-end="url(#s2)"/>
+  <text x="272" y="147" text-anchor="middle" font-size="10" fill="#1a1a2e">note / structure data</text>
+
+  <!-- Step 3 -->
+  <text x="22" y="175" font-size="9" fill="#888">③ Analyze</text>
+  <line x1="340" y1="179" x2="473" y2="179" stroke="#7B2D8B" stroke-width="1.5" marker-end="url(#s2)"/>
+  <text x="407" y="175" text-anchor="middle" font-size="10" fill="#1a1a2e">harmonic map + sections</text>
+
+  <!-- Step 4 -->
+  <text x="22" y="203" font-size="9" fill="#888">④ Generate</text>
+  <line x1="475" y1="207" x2="743" y2="207" stroke="#7B2D8B" stroke-width="1.5" marker-end="url(#s4)"/>
+  <text x="609" y="203" text-anchor="middle" font-size="10" fill="#1a1a2e">draft interpretation JSON → UI</text>
+
+  <!-- Step 5: UI auto-preview -->
+  <text x="22" y="233" font-size="9" fill="#888">⑤ Preview</text>
+  <rect x="705" y="220" width="82" height="22" rx="4" fill="#FCD5B5" stroke="#C05621" stroke-width="1"/>
+  <text x="746" y="235" text-anchor="middle" font-size="10" fill="#1a1a2e">auto-preview</text>
+
+  <!-- Step 6: Conductor refines -->
+  <text x="22" y="263" font-size="9" fill="#888">⑥ Refine</text>
+  <line x1="70" y1="267" x2="743" y2="267" stroke="#2E75B6" stroke-width="1.5" marker-end="url(#s4)"/>
+  <text x="407" y="263" text-anchor="middle" font-size="10" fill="#1a1a2e">conductor edits annotations · tweaks parameters · adjusts blend slider</text>
+
+  <!-- Step 7: Save updated interp file -->
+  <text x="22" y="294" font-size="9" fill="#888">⑦ Save</text>
+  <line x1="745" y1="297" x2="477" y2="297" stroke="#C05621" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#s2)"/>
+  <text x="611" y="293" text-anchor="middle" font-size="10" fill="#C05621">updated interpretation file</text>
+
+  <!-- Step 8: Tweak loop box -->
+  <text x="22" y="325" font-size="9" fill="#888">⑧ Iterate</text>
+  <rect x="705" y="308" width="82" height="22" rx="4" fill="#FCD5B5" stroke="#C05621" stroke-width="1"/>
+  <text x="746" y="323" text-anchor="middle" font-size="10" fill="#1a1a2e">preview updates</text>
+  <rect x="696" y="216" width="100" height="120" rx="4" fill="none" stroke="#C05621" stroke-width="1" stroke-dasharray="6,3"/>
+  <text x="746" y="348" text-anchor="middle" font-size="9" fill="#C05621">[ tweak loop ]</text>
+
+  <!-- Step 9: Export -->
+  <text x="22" y="376" font-size="9" fill="#888">⑨ Export</text>
+  <line x1="70" y1="380" x2="743" y2="380" stroke="#2E75B6" stroke-width="1.5" marker-end="url(#s4)"/>
+  <text x="407" y="376" text-anchor="middle" font-size="10" fill="#1a1a2e">request high-res export</text>
+
+  <!-- Step 10: Collision Resolver pre-pass -->
+  <text x="22" y="407" font-size="9" fill="#888">⑩ Resolve</text>
+  <rect x="568" y="393" width="86" height="28" rx="4" fill="#C9A8D8" stroke="#7B2D8B" stroke-width="1.2"/>
+  <text x="611" y="406" text-anchor="middle" font-size="10" font-weight="bold" fill="#1a1a2e">Collision</text>
+  <text x="611" y="418" text-anchor="middle" font-size="9" fill="#333">overlap + blend metadata</text>
+  <!-- arrow from UI to Collision Resolver -->
+  <line x1="745" y1="393" x2="658" y2="407" stroke="#C05621" stroke-width="1.5" marker-end="url(#s3)"/>
+
+  <!-- Step 11: Shape Variant pre-pass -->
+  <text x="22" y="449" font-size="9" fill="#888">⑪ Variants</text>
+  <rect x="568" y="433" width="86" height="28" rx="4" fill="#FEF0E6" stroke="#C05621" stroke-width="1.2"/>
+  <text x="611" y="446" text-anchor="middle" font-size="10" font-weight="bold" fill="#C05621">Shape Lib</text>
+  <text x="611" y="459" text-anchor="middle" font-size="9" fill="#555">assign variant index</text>
+
+  <!-- Step 12: Send render-ready objects to renderer -->
+  <text x="22" y="487" font-size="9" fill="#888">⑫ Render</text>
+  <line x1="657" y1="487" x2="911" y2="487" stroke="#7B2D8B" stroke-width="1.5" marker-end="url(#s5)"/>
+  <text x="784" y="483" text-anchor="middle" font-size="10" fill="#1a1a2e">render-ready objects + template + params</text>
+
+  <!-- Step 13: Output -->
+  <text x="22" y="517" font-size="9" fill="#888">⑬ Output</text>
+  <line x1="913" y1="521" x2="72" y2="521" stroke="#276749" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#s1)"/>
+  <text x="492" y="517" text-anchor="middle" font-size="10" fill="#276749">PDF / PNG / SVG — print-ready file</text>
+
+  <!-- Step 14: Print -->
+  <rect x="24" y="533" width="94" height="24" rx="4" fill="#B7DFC9" stroke="#276749" stroke-width="1.5"/>
+  <text x="71" y="549" text-anchor="middle" font-size="10" font-weight="bold" fill="#276749">Print → Lobby</text>
+
+  <!-- Pre-render pass bracket annotation -->
+  <rect x="557" y="387" width="108" height="82" rx="4" fill="none" stroke="#7B2D8B" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="611" y="478" text-anchor="middle" font-size="8" fill="#7B2D8B">pre-render passes</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="s1" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#2E75B6"/></marker>
+    <marker id="s2" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7B2D8B"/></marker>
+    <marker id="s3" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#C05621"/></marker>
+    <marker id="s4" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#2E75B6"/></marker>
+    <marker id="s5" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#7B2D8B"/></marker>
+  </defs>
+
+</svg>

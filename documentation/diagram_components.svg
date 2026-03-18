@@ -1,0 +1,195 @@
+<svg viewBox="0 0 1060 820" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+
+  <rect width="1060" height="820" fill="#F8F9FA" rx="8"/>
+  <text x="530" y="34" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a2e">Seeing the Symphony — System Architecture</text>
+  <line x1="60" y1="46" x2="1000" y2="46" stroke="#2E75B6" stroke-width="2"/>
+
+  <!-- COLUMN 1: INPUT -->
+  <text x="150" y="68" text-anchor="middle" font-size="12" font-weight="bold" fill="#2E75B6">INPUT LAYER</text>
+
+  <rect x="60" y="78" width="180" height="54" rx="8" fill="#D5E8F0" stroke="#2E75B6" stroke-width="1.5"/>
+  <text x="150" y="99" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">MusicXML File</text>
+  <text x="150" y="115" text-anchor="middle" font-size="10" fill="#444">pitch · time · duration</text>
+  <text x="150" y="129" text-anchor="middle" font-size="10" fill="#444">dynamics · articulation</text>
+
+  <rect x="60" y="148" width="180" height="54" rx="8" fill="#D5E8F0" stroke="#2E75B6" stroke-width="1.5"/>
+  <text x="150" y="169" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Interpretation File</text>
+  <text x="150" y="185" text-anchor="middle" font-size="10" fill="#444">attack · release · technique</text>
+  <text x="150" y="199" text-anchor="middle" font-size="10" fill="#444">conductor annotations (JSON)</text>
+
+  <rect x="60" y="218" width="180" height="54" rx="8" fill="#D5E8F0" stroke="#2E75B6" stroke-width="1.5"/>
+  <text x="150" y="239" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Harmonic Analysis</text>
+  <text x="150" y="255" text-anchor="middle" font-size="10" fill="#444">key areas · modulations</text>
+  <text x="150" y="269" text-anchor="middle" font-size="10" fill="#444">section boundaries</text>
+
+  <!-- COLUMN 2: ANALYSIS PIPELINE -->
+  <text x="395" y="68" text-anchor="middle" font-size="12" font-weight="bold" fill="#7B2D8B">ANALYSIS PIPELINE</text>
+  <text x="395" y="81" text-anchor="middle" font-size="10" fill="#7B2D8B">Python · music21</text>
+
+  <rect x="270" y="90" width="250" height="445" rx="10" fill="#F3E6F7" stroke="#7B2D8B" stroke-width="1.5"/>
+
+  <rect x="285" y="105" width="220" height="44" rx="6" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="395" y="123" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Score Parser</text>
+  <text x="395" y="139" text-anchor="middle" font-size="10" fill="#444">music21 MusicXML ingestion</text>
+
+  <rect x="285" y="160" width="220" height="44" rx="6" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="395" y="178" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Harmonic Analyzer</text>
+  <text x="395" y="194" text-anchor="middle" font-size="10" fill="#444">key detection · modulation windows</text>
+
+  <rect x="285" y="215" width="220" height="44" rx="6" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="395" y="233" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Phrase Segmenter</text>
+  <text x="395" y="249" text-anchor="middle" font-size="10" fill="#444">section detection · phrase arcs</text>
+
+  <rect x="285" y="270" width="220" height="44" rx="6" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="395" y="288" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Auto-Annotator</text>
+  <text x="395" y="304" text-anchor="middle" font-size="10" fill="#444">generates draft interpretation file</text>
+
+  <rect x="285" y="325" width="220" height="44" rx="6" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="395" y="343" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Data Model</text>
+  <text x="395" y="359" text-anchor="middle" font-size="10" fill="#444">unified note/section/param objects</text>
+
+  <!-- Collision Resolver — highlighted as pre-render pass -->
+  <rect x="285" y="382" width="220" height="52" rx="6" fill="#C9A8D8" stroke="#7B2D8B" stroke-width="1.5"/>
+  <text x="395" y="401" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Collision Resolver</text>
+  <text x="395" y="416" text-anchor="middle" font-size="10" fill="#333">spatial overlap detection</text>
+  <text x="395" y="430" text-anchor="middle" font-size="10" fill="#333">attaches blend metadata to note objects</text>
+
+  <rect x="285" y="448" width="220" height="22" rx="4" fill="#9B72B0" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="395" y="463" text-anchor="middle" font-size="10" font-weight="bold" fill="#FFFFFF">FastAPI Local Server</text>
+
+  <!-- COLUMN 3: AUTHORING UI -->
+  <text x="665" y="68" text-anchor="middle" font-size="12" font-weight="bold" fill="#C05621">AUTHORING UI</text>
+  <text x="665" y="81" text-anchor="middle" font-size="10" fill="#C05621">React · Konva.js · Browser</text>
+
+  <rect x="555" y="90" width="220" height="400" rx="10" fill="#FEF0E6" stroke="#C05621" stroke-width="1.5"/>
+
+  <rect x="570" y="105" width="190" height="44" rx="6" fill="#FCD5B5" stroke="#C05621" stroke-width="1"/>
+  <text x="665" y="123" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Score Import Panel</text>
+  <text x="665" y="139" text-anchor="middle" font-size="10" fill="#444">load MusicXML · trigger analysis</text>
+
+  <rect x="570" y="160" width="190" height="44" rx="6" fill="#FCD5B5" stroke="#C05621" stroke-width="1"/>
+  <text x="665" y="178" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Annotation Editor</text>
+  <text x="665" y="194" text-anchor="middle" font-size="10" fill="#444">refine interpretation file</text>
+
+  <rect x="570" y="215" width="190" height="44" rx="6" fill="#FCD5B5" stroke="#C05621" stroke-width="1"/>
+  <text x="665" y="233" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Parameter Controls</text>
+  <text x="665" y="249" text-anchor="middle" font-size="10" fill="#444">lane height · layout · collision strategy</text>
+
+  <rect x="570" y="270" width="190" height="44" rx="6" fill="#FCD5B5" stroke="#C05621" stroke-width="1"/>
+  <text x="665" y="288" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Template Selector</text>
+  <text x="665" y="304" text-anchor="middle" font-size="10" fill="#444">piano roll · spiral · custom</text>
+
+  <rect x="570" y="325" width="190" height="44" rx="6" fill="#FCD5B5" stroke="#C05621" stroke-width="1"/>
+  <text x="665" y="343" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Blend Slider</text>
+  <text x="665" y="359" text-anchor="middle" font-size="10" fill="#444">contour % · family-pair rules</text>
+
+  <rect x="570" y="380" width="190" height="44" rx="6" fill="#FCD5B5" stroke="#C05621" stroke-width="1"/>
+  <text x="665" y="398" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Live Preview Canvas</text>
+  <text x="665" y="414" text-anchor="middle" font-size="10" fill="#444">real-time visual feedback</text>
+
+  <rect x="570" y="438" width="190" height="22" rx="4" fill="#F4A460" stroke="#C05621" stroke-width="1"/>
+  <text x="665" y="453" text-anchor="middle" font-size="10" font-weight="bold" fill="#1a1a2e">Export to High-Res Renderer</text>
+
+  <!-- COLUMN 4: OUTPUT -->
+  <text x="898" y="68" text-anchor="middle" font-size="12" font-weight="bold" fill="#276749">OUTPUT LAYER</text>
+  <text x="898" y="81" text-anchor="middle" font-size="10" fill="#276749">Python · Cairo</text>
+
+  <!-- Rendering engine — expanded to show sub-systems -->
+  <rect x="808" y="90" width="185" height="218" rx="10" fill="#E6F4EC" stroke="#276749" stroke-width="1.5"/>
+  <text x="900" y="110" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Rendering Engine</text>
+  <text x="900" y="124" text-anchor="middle" font-size="10" fill="#444">Modular template renderer</text>
+
+  <rect x="820" y="131" width="160" height="40" rx="5" fill="#FEF0E6" stroke="#C05621" stroke-width="1.2"/>
+  <text x="900" y="147" text-anchor="middle" font-size="10" font-weight="bold" fill="#C05621">Shape Variant Library</text>
+  <text x="900" y="163" text-anchor="middle" font-size="9" fill="#555">imperfect variants · round-robin</text>
+
+  <rect x="820" y="178" width="160" height="22" rx="4" fill="#B7DFC9" stroke="#276749" stroke-width="1"/>
+  <text x="900" y="193" text-anchor="middle" font-size="10" fill="#1a1a2e">Piano Roll Template</text>
+  <rect x="820" y="204" width="160" height="22" rx="4" fill="#B7DFC9" stroke="#276749" stroke-width="1"/>
+  <text x="900" y="219" text-anchor="middle" font-size="10" fill="#1a1a2e">Spiral Template</text>
+  <rect x="820" y="230" width="160" height="22" rx="4" fill="#B7DFC9" stroke="#276749" stroke-width="1"/>
+  <text x="900" y="245" text-anchor="middle" font-size="9" fill="#888">+ extensible templates</text>
+
+  <!-- Print output -->
+  <rect x="808" y="326" width="185" height="60" rx="10" fill="#E6F4EC" stroke="#276749" stroke-width="1.5"/>
+  <text x="900" y="348" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Print-Ready Export</text>
+  <text x="900" y="364" text-anchor="middle" font-size="10" fill="#444">PDF · PNG · SVG</text>
+  <text x="900" y="379" text-anchor="middle" font-size="10" fill="#444">300+ dpi · large format</text>
+
+  <!-- Lobby installation -->
+  <rect x="808" y="404" width="185" height="60" rx="10" fill="#B7DFC9" stroke="#276749" stroke-width="2"/>
+  <text x="900" y="426" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Lobby Installation</text>
+  <text x="900" y="442" text-anchor="middle" font-size="10" fill="#276749">Printed visual artifact</text>
+  <text x="900" y="457" text-anchor="middle" font-size="10" fill="#276749">Scholarly output</text>
+
+  <!-- ARROWS -->
+  <line x1="242" y1="105" x2="268" y2="127" stroke="#2E75B6" stroke-width="1.5" marker-end="url(#aB)"/>
+  <line x1="242" y1="175" x2="268" y2="175" stroke="#2E75B6" stroke-width="1.5" marker-end="url(#aB)"/>
+  <line x1="242" y1="245" x2="268" y2="228" stroke="#2E75B6" stroke-width="1.5" marker-end="url(#aB)"/>
+
+  <line x1="522" y1="295" x2="553" y2="295" stroke="#7B2D8B" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#aP)"/>
+  <text x="537" y="288" text-anchor="middle" font-size="9" fill="#7B2D8B">REST</text>
+
+  <path d="M 395 316 Q 228 342 150 202" fill="none" stroke="#7B2D8B" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#aP)"/>
+  <text x="248" y="358" text-anchor="middle" font-size="9" fill="#7B2D8B">auto-generates draft</text>
+
+  <line x1="762" y1="449" x2="806" y2="228" stroke="#C05621" stroke-width="2" marker-end="url(#aO)"/>
+
+  <line x1="900" y1="308" x2="900" y2="324" stroke="#276749" stroke-width="1.5" marker-end="url(#aG)"/>
+  <line x1="900" y1="386" x2="900" y2="402" stroke="#276749" stroke-width="1.5" marker-end="url(#aG)"/>
+
+  <!-- LEGEND -->
+  <rect x="60" y="548" width="940" height="258" rx="10" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1.5"/>
+  <text x="530" y="569" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a1a2e">Visual Parameter Mapping  ·  Renderer Sub-Systems</text>
+  <line x1="80" y1="577" x2="980" y2="577" stroke="#CCCCCC" stroke-width="1"/>
+
+  <!-- Foreground -->
+  <rect x="78" y="584" width="290" height="204" rx="8" fill="#FEF0E6" stroke="#C05621" stroke-width="1"/>
+  <text x="223" y="601" text-anchor="middle" font-size="11" font-weight="bold" fill="#C05621">FOREGROUND — Note Level</text>
+  <text x="94" y="619" font-size="10" fill="#333">• Pitch        → vertical position within lane</text>
+  <text x="94" y="635" font-size="10" fill="#333">• Time         → horizontal (left to right)</text>
+  <text x="94" y="651" font-size="10" fill="#333">• Duration     → width of note element</text>
+  <text x="94" y="667" font-size="10" fill="#333">• Dynamics     → brightness · opacity · size</text>
+  <text x="94" y="683" font-size="10" fill="#333">• Articulation → shape (with variant library)</text>
+  <text x="94" y="699" font-size="10" fill="#333">• Attack       → left edge (sharp vs. soft)</text>
+  <text x="94" y="715" font-size="10" fill="#333">• Release      → right edge (clipped vs. tapered)</text>
+  <text x="94" y="731" font-size="10" fill="#333">• Technique    → color hue (pizz · col legno…)</text>
+  <text x="94" y="747" font-size="10" fill="#333">• Lane height  → equal / range / player count</text>
+  <text x="94" y="763" font-size="10" fill="#333">• Collision    → expand / alternate / blend+core</text>
+
+  <!-- Background -->
+  <rect x="383" y="584" width="290" height="204" rx="8" fill="#E6F4EC" stroke="#276749" stroke-width="1"/>
+  <text x="528" y="601" text-anchor="middle" font-size="11" font-weight="bold" fill="#276749">BACKGROUND — Form / Harmony</text>
+  <text x="399" y="619" font-size="10" fill="#333">• Stable tonal area  → solid color field</text>
+  <text x="399" y="635" font-size="10" fill="#333">• Modulation         → gradient color transition</text>
+  <text x="399" y="651" font-size="10" fill="#333">• Key colors         → circle of fifths → hue wheel</text>
+  <text x="399" y="667" font-size="10" fill="#333">• Major / minor      → warm / cool palette variant</text>
+  <text x="399" y="683" font-size="10" fill="#333">• Section boundary   → arcs at top of painting</text>
+  <text x="399" y="699" font-size="10" fill="#333">• Vertical mode A    → Pitch-Based (shared space)</text>
+  <text x="399" y="715" font-size="10" fill="#333">• Vertical mode B    → Score-Based (per-instrument)</text>
+  <text x="399" y="731" font-size="10" fill="#333">• Templates          → Piano Roll · Spiral · ...</text>
+
+  <!-- Renderer sub-systems -->
+  <rect x="688" y="584" width="314" height="204" rx="8" fill="#F3E6F7" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="845" y="601" text-anchor="middle" font-size="11" font-weight="bold" fill="#7B2D8B">RENDERER SUB-SYSTEMS</text>
+
+  <rect x="700" y="609" width="290" height="50" rx="5" fill="#FEF0E6" stroke="#C05621" stroke-width="1"/>
+  <text x="845" y="625" text-anchor="middle" font-size="10" font-weight="bold" fill="#C05621">6.1  Shape Variant Library</text>
+  <text x="845" y="640" text-anchor="middle" font-size="9" fill="#444">3–5 imperfect variants per articulation type</text>
+  <text x="845" y="653" text-anchor="middle" font-size="9" fill="#444">deterministic round-robin · seed controllable in UI</text>
+
+  <rect x="700" y="666" width="290" height="90" rx="5" fill="#E6F4EC" stroke="#276749" stroke-width="1"/>
+  <text x="845" y="682" text-anchor="middle" font-size="10" font-weight="bold" fill="#276749">6.2  Collision Resolution System</text>
+  <text x="845" y="697" text-anchor="middle" font-size="9" fill="#444">Strategy A: Lane Expansion</text>
+  <text x="845" y="711" text-anchor="middle" font-size="9" fill="#444">Strategy B: Color Alternation</text>
+  <text x="845" y="725" text-anchor="middle" font-size="9" fill="#444">Strategy C: Blend with Protected Core (default)</text>
+  <text x="845" y="739" text-anchor="middle" font-size="9" fill="#444">family-aware contour slider · Cairo alpha compositing</text>
+
+  <defs>
+    <marker id="aB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#2E75B6"/></marker>
+    <marker id="aP" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#7B2D8B"/></marker>
+    <marker id="aO" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#C05621"/></marker>
+    <marker id="aG" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#276749"/></marker>
+  </defs>
+
+</svg>

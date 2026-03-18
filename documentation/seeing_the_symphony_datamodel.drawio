@@ -1,0 +1,251 @@
+<mxfile host="65bd71144e">
+    <diagram name="DataModel UML" id="datamodel-uml-1">
+        <mxGraphModel dx="1731" dy="825" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1400" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="Seeing the Symphony - Data Model UML Class Diagram" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#1a1a2e;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="20" width="1300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="InstrumentMeta" style="text;html=1;strokeColor=#7B2D8B;fillColor=#7B2D8B;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;fontColor=#FFFFFF;rounded=1;arcSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="60" width="310" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="instrument_id : string  &lt;&lt;PK&gt;&gt;&#xa;name : string&#xa;abbreviation : string&#xa;instrument_family : InstrumentFamilyEnum&#xa;score_order : int&#xa;transposition : int  (semitones)&#xa;player_count : int&#xa;pitch_range_low : int  (midi)&#xa;pitch_range_high : int  (midi)&#xa;dynamic_table : dict[DynamicEnum to float]" style="text;html=1;strokeColor=#7B2D8B;fillColor=#E0C8ED;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="86" width="310" height="156" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="+ to_json()&#xa;+ from_xml(part)&#xa;+ get_dynamic_value(marking)" style="text;html=1;strokeColor=#7B2D8B;fillColor=#E0C8ED;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;fontColor=#555555;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="242" width="310" height="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="ScoreData" style="text;html=1;strokeColor=#2E75B6;fillColor=#2E75B6;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;fontColor=#FFFFFF;rounded=1;arcSize=6;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="60" width="420" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="title, composer, opus, movement, year : string&#xa;engraver_edition : string | null&#xa;musicxml_filename : string&#xa;musicxml_hash : string&#xa;cil_filename : string | null&#xa;duration_seconds : float&#xa;has_unresolved_events : bool&#xa;[collections: instruments, notes, sections,&#xa; dynamic_spans, tempo_events, collision_clusters]" style="text;html=1;strokeColor=#2E75B6;fillColor=#D5E8F0;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="86" width="420" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="+ to_json()&#xa;+ from_xml(path)&#xa;+ validate()&#xa;+ get_instrument(id)&#xa;+ get_notes_for(id, bar_start, bar_end)&#xa;+ get_notes_at(time)&#xa;+ get_section_at(time)&#xa;+ get_tempo_at(time)&#xa;+ get_unresolved()" style="text;html=1;strokeColor=#2E75B6;fillColor=#D5E8F0;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;fontColor=#555555;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="226" width="420" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="TempoEvent" style="text;html=1;strokeColor=#975A16;fillColor=#975A16;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;fontColor=#FFFFFF;rounded=1;arcSize=6;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="60" width="310" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="tempo_event_id : string  &lt;&lt;PK&gt;&gt;&#xa;bar, beat : int&#xa;time_onset : float  (seconds)&#xa;bpm : float&#xa;beat_unit : BeatUnitEnum&#xa;transition_type : IMMEDIATE | GRADUAL&#xa;transition_end_bar, transition_end_beat : int | null&#xa;transition_end_bpm : float | null&#xa;transition_curve : ShapeEnum | null&#xa;notation_label : string | null&#xa;is_auto_analyzed : bool&#xa;is_gradual_unresolved : bool" style="text;html=1;strokeColor=#975A16;fillColor=#FEF9E6;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="86" width="310" height="184" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="+ to_json()&#xa;+ from_xml(tempo_mark)&#xa;+ get_bpm_at(time: float)&#xa;+ seconds_per_beat()" style="text;html=1;strokeColor=#975A16;fillColor=#FEF9E6;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;fontColor=#555555;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="270" width="310" height="64" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="NoteObject" style="text;html=1;strokeColor=#C05621;fillColor=#C05621;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;fontColor=#FFFFFF;rounded=1;arcSize=6;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="430" width="310" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" value="bar : int&#xa;beat : int&#xa;subdivision : int  (0-60)&#xa;time_onset : float  (seconds)&#xa;time_duration : float  (seconds)&#xa;instrument_id : string  &lt;&lt;FK&gt;&gt;&#xa;voice : int  (default = 1)&#xa;pitch_midi : int  (0-127, concert pitch)&#xa;pitch_name : string  (e.g. G4)&#xa;dynamic_marking : DynamicMarkingEnum | null&#xa;dynamic_value : float  (0.0-1.0)&#xa;sforzando : SforzandoEnum | null&#xa;dynamic_span_id : string | null  &lt;&lt;FK&gt;&gt;&#xa;dynamic_span_position : float | null&#xa;articulation : list[ArticulationEnum]&#xa;technique : list[TechniqueEnum]&#xa;attack : AttackEnum&#xa;release : ReleaseEnum&#xa;variant_index : int | null&#xa;collision_cluster_id : string | null  &lt;&lt;FK&gt;&gt;" style="text;html=1;strokeColor=#C05621;fillColor=#FEF0E6;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="456" width="310" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" value="+ to_json()&#xa;+ from_xml(note, part)&#xa;+ is_colliding_with(other)&#xa;+ get_instrument()&#xa;+ get_dynamic_value()" style="text;html=1;strokeColor=#C05621;fillColor=#FEF0E6;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;fontColor=#555555;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="756" width="310" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" value="ScoreSection" style="text;html=1;strokeColor=#276749;fillColor=#276749;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;fontColor=#FFFFFF;rounded=1;arcSize=6;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="430" width="310" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="section_id : string  &lt;&lt;PK&gt;&gt;&#xa;label : string  (free text)&#xa;is_auto_analyzed : bool&#xa;start_bar, start_beat : int&#xa;end_bar, end_beat : int&#xa;time_onset, time_duration : float&#xa;harmonic_events : list[HarmonicEvent]" style="text;html=1;strokeColor=#276749;fillColor=#E6F4EC;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="456" width="310" height="112" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" value="+ to_json()&#xa;+ get_color_at(time: float)&#xa;+ get_key_at(time: float)" style="text;html=1;strokeColor=#276749;fillColor=#E6F4EC;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;fontColor=#555555;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="568" width="310" height="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="60" value="HarmonicEvent  (embedded)" style="text;html=1;strokeColor=#276749;fillColor=#276749;align=center;verticalAlign=middle;fontStyle=1;fontSize=11;fontColor=#FFFFFF;rounded=1;arcSize=6;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="650" width="310" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="61" value="time_onset, time_duration : float&#xa;key_tonic : string&#xa;key_mode : MAJOR | MINOR&#xa;circle_of_fifths_pos : int  (0-11)&#xa;is_transitional : bool&#xa;is_auto_analyzed : bool&#xa;&#xa;No color_hex - UI maps circle_of_fifths_pos to hue" style="text;html=1;strokeColor=#276749;fillColor=#B7DFC9;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="674" width="310" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="70" value="DynamicSpan" style="text;html=1;strokeColor=#B7791F;fillColor=#B7791F;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;fontColor=#FFFFFF;rounded=1;arcSize=6;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="430" width="310" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="71" value="span_id : string  &lt;&lt;PK&gt;&gt;&#xa;span_type : CRESCENDO | DIMINUENDO&#xa;instrument_id : string  &lt;&lt;FK&gt;&gt;&#xa;start_bar, start_beat : int&#xa;end_bar, end_beat : int&#xa;time_onset, time_duration : float&#xa;dynamic_start : DynamicMarkingEnum&#xa;dynamic_end : DynamicMarkingEnum&#xa;shape : LINEAR | CONVEX | CONCAVE&#xa;is_auto_analyzed : bool" style="text;html=1;strokeColor=#B7791F;fillColor=#FFF8E6;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="456" width="310" height="156" as="geometry"/>
+                </mxCell>
+                <mxCell id="72" value="+ to_json()&#xa;+ from_xml(hairpin, part)&#xa;+ get_value_at(position: float)" style="text;html=1;strokeColor=#B7791F;fillColor=#FFF8E6;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;fontColor=#555555;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="612" width="310" height="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="80" value="CollisionCluster" style="text;html=1;strokeColor=#7B2D8B;fillColor=#7B2D8B;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;fontColor=#FFFFFF;rounded=1;arcSize=6;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="900" width="390" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="81" value="cluster_id : string  &lt;&lt;PK&gt;&gt;&#xa;note_ids : list[string]  &lt;&lt;FK list&gt;&gt;&#xa;instrument_ids : list[string]&#xa;time_onset : float&#xa;time_duration : float&#xa;pitch_center : int  (midi)&#xa;pitch_spread : int  (semitones)&#xa;is_unison : bool&#xa;family_pairs : list[string]&#xa;strategy : StrategyEnum&#xa;contour_pct : float  (0.0-1.0)&#xa;shape_override : bool&#xa;family_pair_rules : dict | null&#xa;is_auto_analyzed : bool" style="text;html=1;strokeColor=#7B2D8B;fillColor=#F3E6F7;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="926" width="390" height="218" as="geometry"/>
+                </mxCell>
+                <mxCell id="82" value="+ to_json()&#xa;+ get_dominant_family_pair()&#xa;+ get_strategy()&#xa;+ get_contour_pct(instrument_a, instrument_b)" style="text;html=1;strokeColor=#7B2D8B;fillColor=#F3E6F7;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;fontColor=#555555;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="1144" width="390" height="64" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" value="ValidationResult" style="text;html=1;strokeColor=#C53030;fillColor=#C53030;align=center;verticalAlign=middle;fontStyle=1;fontSize=12;fontColor=#FFFFFF;rounded=1;arcSize=6;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="900" width="390" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="91" value="errors : list[ValidationMessage]&#xa;warnings : list[ValidationMessage]&#xa;suggestions : list[ValidationMessage]&#xa;is_valid : bool  (errors empty)&#xa;is_clean : bool  (warnings empty)&#xa;is_pristine : bool  (suggestions empty)" style="text;html=1;strokeColor=#C53030;fillColor=#FFF5F5;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="926" width="390" height="96" as="geometry"/>
+                </mxCell>
+                <mxCell id="92" value="ValidationMessage  (embedded)" style="text;html=1;strokeColor=#C53030;fillColor=#FFF5F5;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;rounded=0;fontSize=10;fontStyle=1;fontColor=#C53030;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="1022" width="390" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="93" value="level : ERROR | WARNING | SUGGESTION&#xa;code : string&#xa;message : string&#xa;object_type : string&#xa;object_ref : string | null&#xa;bar : int | null&#xa;suggestion : string | null" style="text;html=1;strokeColor=#C53030;fillColor=#FFF5F5;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="1046" width="390" height="112" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1" style="edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;entryX=1;entryY=0.4;endArrow=block;endFill=1;startArrow=ERmandOne;startFill=0;strokeColor=#2E75B6;strokeWidth=2;" parent="1" source="21" target="11" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="460" y="156"/>
+                            <mxPoint x="460" y="150"/>
+                            <mxPoint x="342" y="150"/>
+                            <mxPoint x="342" y="148"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r1l" value="1..* owns" style="edgeLabel;html=1;fontSize=9;fontColor=#2E75B6;align=center;" parent="r1" vertex="1" connectable="0">
+                    <mxGeometry x="-0.3" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r2" style="edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.8;entryX=0.5;entryY=0;endArrow=block;endFill=1;startArrow=ERmandOne;startFill=0;strokeColor=#2E75B6;strokeWidth=2;" parent="1" source="22" target="40" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="450" y="320"/>
+                            <mxPoint x="185" y="320"/>
+                            <mxPoint x="185" y="430"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r2l" value="0..* owns" style="edgeLabel;html=1;fontSize=9;fontColor=#2E75B6;align=center;" parent="r2" vertex="1" connectable="0">
+                    <mxGeometry x="-0.3" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r3" style="edgeStyle=orthogonalEdgeStyle;exitX=0.3;exitY=1;entryX=0.3;entryY=0;endArrow=block;endFill=1;startArrow=ERmandOne;startFill=0;strokeColor=#2E75B6;strokeWidth=2;" parent="1" source="22" target="50" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="r3l" value="1..* owns" style="edgeLabel;html=1;fontSize=9;fontColor=#2E75B6;align=center;" parent="r3" vertex="1" connectable="0">
+                    <mxGeometry x="0.1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r4" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.2;entryX=0;entryY=0.4;endArrow=block;endFill=1;startArrow=ERmandOne;startFill=0;strokeColor=#2E75B6;strokeWidth=2;" parent="1" source="21" target="31" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="900" y="156"/>
+                            <mxPoint x="1080" y="156"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r4l" value="1..* owns" style="edgeLabel;html=1;fontSize=9;fontColor=#2E75B6;align=center;" parent="r4" vertex="1" connectable="0">
+                    <mxGeometry x="0.2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r5" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.7;entryX=0;entryY=0.4;endArrow=block;endFill=1;startArrow=ERmandOne;startFill=0;strokeColor=#2E75B6;strokeWidth=2;" parent="1" source="21" target="71" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="975" y="240"/>
+                            <mxPoint x="975" y="530"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r5l" value="0..* owns" style="edgeLabel;html=1;fontSize=9;fontColor=#2E75B6;align=center;" parent="r5" vertex="1" connectable="0">
+                    <mxGeometry x="0.2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r6" style="edgeStyle=orthogonalEdgeStyle;exitX=0.1;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;startArrow=ERmandOne;startFill=0;strokeColor=#2E75B6;strokeWidth=2;" parent="1" source="22" target="80" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="522" y="350"/>
+                            <mxPoint x="420" y="350"/>
+                            <mxPoint x="420" y="860"/>
+                            <mxPoint x="225" y="860"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r6l" value="0..* owns" style="edgeLabel;html=1;fontSize=9;fontColor=#2E75B6;align=center;" parent="r6" vertex="1" connectable="0">
+                    <mxGeometry x="-0.3" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r7" style="edgeStyle=orthogonalEdgeStyle;exitX=0.2;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;startArrow=ERmandOne;startFill=0;strokeColor=#2E75B6;strokeWidth=2;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="450" y="366"/>
+                            <mxPoint x="450" y="874"/>
+                            <mxPoint x="665" y="874"/>
+                        </Array>
+                        <mxPoint x="554" y="366" as="sourcePoint"/>
+                        <mxPoint x="665" y="900" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r7l" value="1 owns" style="edgeLabel;html=1;fontSize=9;fontColor=#2E75B6;align=center;" parent="r7" vertex="1" connectable="0">
+                    <mxGeometry x="0.2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r8" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;startArrow=ERmandOne;startFill=0;strokeColor=#276749;strokeWidth=1.8;" parent="1" source="52" target="60" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="r8l" value="1..*" style="edgeLabel;html=1;fontSize=9;fontColor=#276749;align=center;" parent="r8" vertex="1" connectable="0">
+                    <mxGeometry x="0.1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="f1" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.15;entryX=1;entryY=0.5;endArrow=open;endFill=0;strokeColor=#C05621;strokeWidth=1.5;dashed=1;" parent="1" source="41" target="11" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="340" y="500"/>
+                            <mxPoint x="356" y="500"/>
+                            <mxPoint x="356" y="164"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="f1l" value="FK instrument_id" style="edgeLabel;html=1;fontSize=9;fontColor=#C05621;align=center;" parent="f1" vertex="1" connectable="0">
+                    <mxGeometry x="-0.1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="f2" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.25;entryX=0;entryY=0.55;endArrow=open;endFill=0;strokeColor=#C05621;strokeWidth=1.5;dashed=1;exitDx=0;exitDy=0;" parent="1" source="42" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="340" y="810"/>
+                            <mxPoint x="1062" y="810"/>
+                            <mxPoint x="1062" y="592"/>
+                            <mxPoint x="1080" y="592"/>
+                        </Array>
+                        <mxPoint x="340" y="669.2" as="sourcePoint"/>
+                        <mxPoint x="1080" y="590" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="f2l" value="FK dynamic_span_id" style="edgeLabel;html=1;fontSize=9;fontColor=#C05621;align=center;" parent="f2" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="41" y="-20" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="f3" style="edgeStyle=orthogonalEdgeStyle;exitX=0.25;exitY=1;entryX=0.25;entryY=0;endArrow=open;endFill=0;strokeColor=#C05621;strokeWidth=1.5;dashed=1;" parent="1" source="42" target="80" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="f3l" value="FK collision_cluster_id" style="edgeLabel;html=1;fontSize=9;fontColor=#C05621;align=center;" parent="f3" vertex="1" connectable="0">
+                    <mxGeometry x="0.1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="f4" style="edgeStyle=orthogonalEdgeStyle;exitX=0.15;exitY=0;endArrow=open;endFill=0;strokeColor=#B7791F;strokeWidth=1.5;dashed=1;" parent="1" source="71" target="12" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1127" y="390"/>
+                            <mxPoint x="247" y="390"/>
+                            <mxPoint x="247" y="300"/>
+                            <mxPoint x="260" y="300"/>
+                        </Array>
+                        <mxPoint x="310" y="310" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="f4l" value="FK instrument_id" style="edgeLabel;html=1;fontSize=9;fontColor=#B7791F;align=center;" parent="f4" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint y="-12" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

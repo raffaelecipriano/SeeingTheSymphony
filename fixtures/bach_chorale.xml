@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC
+  "-//Recordare//DTD MusicXML 3.1 Partwise//EN"
+  "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="3.1">
+
+  <work>
+    <work-title>Chorale in G Major (Test Fixture)</work-title>
+  </work>
+
+  <identification>
+    <creator type="composer">Johann Sebastian Bach</creator>
+    <encoding>
+      <encoding-date>2026-03-16</encoding-date>
+      <software>Seeing the Symphony Test Suite</software>
+    </encoding>
+  </identification>
+
+  <part-list>
+    <score-part id="P1">
+      <part-name>Soprano</part-name>
+      <part-abbreviation>S.</part-abbreviation>
+      <score-instrument id="P1-I1">
+        <instrument-name>Voice</instrument-name>
+      </score-instrument>
+    </score-part>
+    <score-part id="P2">
+      <part-name>Alto</part-name>
+      <part-abbreviation>A.</part-abbreviation>
+      <score-instrument id="P2-I1">
+        <instrument-name>Voice</instrument-name>
+      </score-instrument>
+    </score-part>
+    <score-part id="P3">
+      <part-name>Tenor</part-name>
+      <part-abbreviation>T.</part-abbreviation>
+      <score-instrument id="P3-I1">
+        <instrument-name>Voice</instrument-name>
+      </score-instrument>
+    </score-part>
+    <score-part id="P4">
+      <part-name>Bass</part-name>
+      <part-abbreviation>B.</part-abbreviation>
+      <score-instrument id="P4-I1">
+        <instrument-name>Voice</instrument-name>
+      </score-instrument>
+    </score-part>
+  </part-list>
+
+  <!-- ============================================================ -->
+  <!-- SOPRANO                                                       -->
+  <!-- ============================================================ -->
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>1</fifths><mode>major</mode></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <direction placement="above">
+        <direction-type>
+          <metronome parentheses="no">
+            <beat-unit>quarter</beat-unit>
+            <per-minute>72</per-minute>
+          </metronome>
+        </direction-type>
+        <sound tempo="72"/>
+      </direction>
+      <direction placement="below">
+        <direction-type><dynamics><p/></dynamics></direction-type>
+        <sound dynamics="54"/>
+      </direction>
+      <!-- G4 quarter -->
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <!-- A4 quarter -->
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><notations><articulations><accent/></articulations></notations></note>
+      <!-- B4 quarter -->
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <!-- G4 quarter -->
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="2">
+      <!-- Crescendo hairpin over this measure -->
+      <direction placement="below">
+        <direction-type><wedge type="crescendo" number="1"/></direction-type>
+      </direction>
+      <direction placement="below">
+        <direction-type><dynamics><mp/></dynamics></direction-type>
+        <sound dynamics="66"/>
+      </direction>
+      <!-- A4 quarter -->
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <!-- G4 quarter -->
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <!-- F4 quarter sharp -->
+      <note><pitch><step>F</step><alter>1</alter><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <!-- G4 half -->
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type>
+        <notations><articulations><tenuto/></articulations></notations>
+      </note>
+      <direction placement="below">
+        <direction-type><wedge type="stop" number="1"/></direction-type>
+      </direction>
+    </measure>
+    <measure number="3">
+      <direction placement="below">
+        <direction-type><dynamics><mf/></dynamics></direction-type>
+        <sound dynamics="78"/>
+      </direction>
+      <!-- C5 quarter -->
+      <note><pitch><step>C</step><octave>5</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <!-- B4 quarter -->
+      <note><pitch><step>B</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <!-- A4 quarter -->
+      <note><pitch><step>A</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type><notations><articulations><staccato/></articulations></notations></note>
+      <!-- G4 quarter -->
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="4">
+      <direction placement="below">
+        <direction-type><dynamics><p/></dynamics></direction-type>
+        <sound dynamics="54"/>
+      </direction>
+      <!-- D5 half -->
+      <note><pitch><step>D</step><octave>5</octave></pitch><duration>8</duration><type>half</type></note>
+      <!-- G4 half (final note) -->
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type>
+        <notations><fermata type="upright"/></notations>
+      </note>
+    </measure>
+  </part>
+
+  <!-- ============================================================ -->
+  <!-- ALTO                                                          -->
+  <!-- ============================================================ -->
+  <part id="P2">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>1</fifths><mode>major</mode></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <direction placement="below">
+        <direction-type><dynamics><p/></dynamics></direction-type>
+        <sound dynamics="54"/>
+      </direction>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="2">
+      <direction placement="below">
+        <direction-type><dynamics><mp/></dynamics></direction-type>
+        <sound dynamics="66"/>
+      </direction>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>8</duration><type>half</type></note>
+    </measure>
+    <measure number="3">
+      <direction placement="below">
+        <direction-type><dynamics><mf/></dynamics></direction-type>
+        <sound dynamics="78"/>
+      </direction>
+      <note><pitch><step>E</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="4">
+      <direction placement="below">
+        <direction-type><dynamics><p/></dynamics></direction-type>
+        <sound dynamics="54"/>
+      </direction>
+      <note><pitch><step>G</step><octave>4</octave></pitch><duration>8</duration><type>half</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>8</duration><type>half</type></note>
+    </measure>
+  </part>
+
+  <!-- ============================================================ -->
+  <!-- TENOR                                                         -->
+  <!-- ============================================================ -->
+  <part id="P3">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>1</fifths><mode>major</mode></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line><clef-octave-change>-1</clef-octave-change></clef>
+      </attributes>
+      <direction placement="below">
+        <direction-type><dynamics><p/></dynamics></direction-type>
+        <sound dynamics="54"/>
+      </direction>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="2">
+      <direction placement="below">
+        <direction-type><dynamics><mp/></dynamics></direction-type>
+        <sound dynamics="66"/>
+      </direction>
+      <note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>8</duration><type>half</type></note>
+    </measure>
+    <measure number="3">
+      <direction placement="below">
+        <direction-type><dynamics><mf/></dynamics></direction-type>
+        <sound dynamics="78"/>
+      </direction>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="4">
+      <direction placement="below">
+        <direction-type><dynamics><p/></dynamics></direction-type>
+        <sound dynamics="54"/>
+      </direction>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>8</duration><type>half</type></note>
+      <note><pitch><step>B</step><octave>3</octave></pitch><duration>8</duration><type>half</type></note>
+    </measure>
+  </part>
+
+  <!-- ============================================================ -->
+  <!-- BASS                                                          -->
+  <!-- ============================================================ -->
+  <part id="P4">
+    <measure number="1">
+      <attributes>
+        <divisions>4</divisions>
+        <key><fifths>1</fifths><mode>major</mode></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>F</sign><line>4</line></clef>
+      </attributes>
+      <direction placement="below">
+        <direction-type><dynamics><p/></dynamics></direction-type>
+        <sound dynamics="54"/>
+      </direction>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="2">
+      <direction placement="below">
+        <direction-type><dynamics><mp/></dynamics></direction-type>
+        <sound dynamics="66"/>
+      </direction>
+      <note><pitch><step>F</step><alter>1</alter><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>A</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>8</duration><type>half</type></note>
+    </measure>
+    <measure number="3">
+      <direction placement="below">
+        <direction-type><dynamics><mf/></dynamics></direction-type>
+        <sound dynamics="78"/>
+      </direction>
+      <note><pitch><step>C</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>D</step><octave>3</octave></pitch><duration>4</duration><type>quarter</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>4</duration><type>quarter</type></note>
+    </measure>
+    <measure number="4">
+      <direction placement="below">
+        <direction-type><dynamics><p/></dynamics></direction-type>
+        <sound dynamics="54"/>
+      </direction>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>8</duration><type>half</type></note>
+      <note><pitch><step>G</step><octave>2</octave></pitch><duration>8</duration><type>half</type>
+        <notations><fermata type="upright"/></notations>
+      </note>
+    </measure>
+  </part>
+
+</score-partwise>

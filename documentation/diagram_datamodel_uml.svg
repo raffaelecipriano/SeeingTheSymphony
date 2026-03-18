@@ -1,0 +1,361 @@
+<svg viewBox="0 0 1500 1200" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+
+  <rect width="1500" height="1200" fill="#F8F9FA" rx="8"/>
+  <text x="750" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a1a2e">Seeing the Symphony — Data Model UML Class Diagram</text>
+  <line x1="40" y1="40" x2="1460" y2="40" stroke="#2E75B6" stroke-width="2"/>
+
+  <!--
+    CORRIDOR MAP (each arrow gets its own lane, no sharing):
+    Horizontal corridors between row 1 and row 2:
+      y=318  ScoreData → InstrumentMeta  (left branch)
+      y=326  ScoreData → NoteObject      (left branch)
+      y=334  ScoreData → ScoreSection    (straight down)
+      y=318  ScoreData → TempoEvent      (right branch, top)
+      y=326  ScoreData → DynamicSpan     (right branch, lower)
+    Vertical right-side corridors:
+      x=960  ScoreData → TempoEvent
+      x=970  ScoreData → DynamicSpan
+    Horizontal corridors between row 2 and row 3:
+      y=778  ScoreData → CollisionCluster
+      y=788  ScoreData → ValidationResult
+      y=798  NoteObject → CollisionCluster (FK, down)
+      y=808  NoteObject → DynamicSpan (FK, right long path)
+    Vertical left corridors:
+      x=355  NoteObject right edge outgoing FKs
+      x=365  second FK lane
+  -->
+
+  <!-- ══════════════════════════════════════════════
+       ROW 1   y: 55–312
+       InstrumentMeta  x:30–340
+       ScoreData       x:480–900
+       TempoEvent      x:1060–1380
+  ══════════════════════════════════════════════ -->
+
+  <!-- INSTRUMENTMETA -->
+  <rect x="30"  y="55"  width="310" height="260" rx="6" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="2"/>
+  <rect x="30"  y="55"  width="310" height="26"  rx="6" fill="#7B2D8B"/>
+  <text x="185" y="72"  text-anchor="middle" font-size="12" font-weight="bold" fill="#FFF">InstrumentMeta</text>
+  <line x1="30" y1="81" x2="340" y2="81" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="42" y="96"  font-size="10" fill="#1a1a2e">instrument_id : string  «PK»</text>
+  <text x="42" y="110" font-size="10" fill="#1a1a2e">name : string</text>
+  <text x="42" y="124" font-size="10" fill="#1a1a2e">abbreviation : string</text>
+  <text x="42" y="138" font-size="10" fill="#1a1a2e">instrument_family : InstrumentFamilyEnum</text>
+  <text x="42" y="152" font-size="10" fill="#1a1a2e">score_order : int</text>
+  <text x="42" y="166" font-size="10" fill="#1a1a2e">transposition : int  (semitones)</text>
+  <text x="42" y="180" font-size="10" fill="#1a1a2e">player_count : int</text>
+  <text x="42" y="194" font-size="10" fill="#1a1a2e">pitch_range_low : int  (midi)</text>
+  <text x="42" y="208" font-size="10" fill="#1a1a2e">pitch_range_high : int  (midi)</text>
+  <text x="42" y="222" font-size="10" fill="#1a1a2e">dynamic_table : dict[DynamicEnum → float]</text>
+  <line x1="30" y1="230" x2="340" y2="230" stroke="#7B2D8B" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="42" y="245" font-size="10" fill="#555">+ to_json()</text>
+  <text x="42" y="259" font-size="10" fill="#555">+ from_xml(part)</text>
+  <text x="42" y="273" font-size="10" fill="#555">+ get_dynamic_value(marking)</text>
+  <text x="42" y="293" font-size="9"  fill="#888" font-style="italic">1 per instrument/part in score</text>
+
+  <!-- SCOREDATA -->
+  <rect x="480" y="55"  width="420" height="260" rx="6" fill="#D5E8F0" stroke="#2E75B6" stroke-width="2"/>
+  <rect x="480" y="55"  width="420" height="26"  rx="6" fill="#2E75B6"/>
+  <text x="690" y="72"  text-anchor="middle" font-size="12" font-weight="bold" fill="#FFF">ScoreData</text>
+  <line x1="480" y1="81" x2="900" y2="81" stroke="#2E75B6" stroke-width="1"/>
+  <text x="492" y="96"  font-size="10" fill="#1a1a2e">title, composer, opus, movement, year : string</text>
+  <text x="492" y="110" font-size="10" fill="#1a1a2e">engraver_edition : string | null</text>
+  <text x="492" y="124" font-size="10" fill="#1a1a2e">musicxml_filename : string</text>
+  <text x="492" y="138" font-size="10" fill="#1a1a2e">musicxml_hash : string</text>
+  <text x="492" y="152" font-size="10" fill="#1a1a2e">cil_filename : string | null</text>
+  <text x="492" y="166" font-size="10" fill="#1a1a2e">duration_seconds : float</text>
+  <text x="492" y="180" font-size="10" fill="#1a1a2e">has_unresolved_events : bool</text>
+  <text x="492" y="194" font-size="10" fill="#888" font-style="italic">+ collections: instruments, notes, sections,</text>
+  <text x="492" y="208" font-size="10" fill="#888" font-style="italic">  dynamic_spans, tempo_events, collision_clusters</text>
+  <line x1="480" y1="216" x2="900" y2="216" stroke="#2E75B6" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="492" y="231" font-size="10" fill="#555">+ to_json()</text>
+  <text x="492" y="245" font-size="10" fill="#555">+ from_xml(path)</text>
+  <text x="492" y="259" font-size="10" fill="#555">+ validate()</text>
+  <text x="492" y="273" font-size="10" fill="#555">+ get_instrument(id)</text>
+  <text x="492" y="287" font-size="10" fill="#555">+ get_notes_for(id, bar_start, bar_end)</text>
+  <text x="492" y="301" font-size="10" fill="#555">+ get_notes_at(time)  /  get_section_at(time)  /  get_tempo_at(time)</text>
+  <text x="492" y="315" font-size="10" fill="#555">+ get_unresolved()</text>
+
+  <!-- TEMPOEVENT -->
+  <rect x="1080" y="55"  width="310" height="270" rx="6" fill="#FEF9E6" stroke="#975A16" stroke-width="2"/>
+  <rect x="1080" y="55"  width="310" height="26"  rx="6" fill="#975A16"/>
+  <text x="1235" y="72"  text-anchor="middle" font-size="12" font-weight="bold" fill="#FFF">TempoEvent</text>
+  <line x1="1080" y1="81" x2="1390" y2="81" stroke="#975A16" stroke-width="1"/>
+  <text x="1092" y="96"  font-size="10" fill="#1a1a2e">tempo_event_id : string  «PK»</text>
+  <text x="1092" y="110" font-size="10" fill="#1a1a2e">bar, beat : int</text>
+  <text x="1092" y="124" font-size="10" fill="#1a1a2e">time_onset : float  (seconds)</text>
+  <text x="1092" y="138" font-size="10" fill="#1a1a2e">bpm : float</text>
+  <text x="1092" y="152" font-size="10" fill="#1a1a2e">beat_unit : BeatUnitEnum</text>
+  <text x="1092" y="166" font-size="10" fill="#1a1a2e">transition_type : IMMEDIATE | GRADUAL</text>
+  <text x="1092" y="180" font-size="10" fill="#1a1a2e">transition_end_bar, transition_end_beat : int | null</text>
+  <text x="1092" y="194" font-size="10" fill="#1a1a2e">transition_end_bpm : float | null</text>
+  <text x="1092" y="208" font-size="10" fill="#1a1a2e">transition_curve : ShapeEnum | null</text>
+  <text x="1092" y="222" font-size="10" fill="#1a1a2e">notation_label : string | null</text>
+  <text x="1092" y="236" font-size="10" fill="#1a1a2e">is_auto_analyzed : bool</text>
+  <text x="1092" y="250" font-size="10" fill="#1a1a2e">is_gradual_unresolved : bool</text>
+  <line x1="1080" y1="258" x2="1390" y2="258" stroke="#975A16" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="1092" y="273" font-size="10" fill="#555">+ to_json()</text>
+  <text x="1092" y="287" font-size="10" fill="#555">+ from_xml(tempo_mark)</text>
+  <text x="1092" y="301" font-size="10" fill="#555">+ get_bpm_at(time: float)</text>
+  <text x="1092" y="315" font-size="10" fill="#555">+ seconds_per_beat()</text>
+
+  <!-- ══════════════════════════════════════════════
+       ROW 2   y: 370–780
+       NoteObject    x:30–340
+       ScoreSection  x:480–790  + HarmonicEvent below
+       DynamicSpan   x:1080–1390
+  ══════════════════════════════════════════════ -->
+
+  <!-- NOTEOBJECT -->
+  <rect x="30"  y="370" width="310" height="398" rx="6" fill="#FEF0E6" stroke="#C05621" stroke-width="2"/>
+  <rect x="30"  y="370" width="310" height="26"  rx="6" fill="#C05621"/>
+  <text x="185" y="387" text-anchor="middle" font-size="12" font-weight="bold" fill="#FFF">NoteObject</text>
+  <line x1="30" y1="396" x2="340" y2="396" stroke="#C05621" stroke-width="1"/>
+  <text x="42" y="411" font-size="10" fill="#1a1a2e">bar : int</text>
+  <text x="42" y="425" font-size="10" fill="#1a1a2e">beat : int</text>
+  <text x="42" y="439" font-size="10" fill="#1a1a2e">subdivision : int  (0–60)</text>
+  <text x="42" y="453" font-size="10" fill="#1a1a2e">time_onset : float  (seconds)</text>
+  <text x="42" y="467" font-size="10" fill="#1a1a2e">time_duration : float  (seconds)</text>
+  <text x="42" y="481" font-size="10" fill="#1a1a2e">instrument_id : string  «FK»</text>
+  <text x="42" y="495" font-size="10" fill="#1a1a2e">voice : int  (default = 1)</text>
+  <text x="42" y="509" font-size="10" fill="#1a1a2e">pitch_midi : int  (0–127, concert pitch)</text>
+  <text x="42" y="523" font-size="10" fill="#1a1a2e">pitch_name : string  (e.g. G4)</text>
+  <text x="42" y="537" font-size="10" fill="#1a1a2e">dynamic_marking : DynamicMarkingEnum | null</text>
+  <text x="42" y="551" font-size="10" fill="#1a1a2e">dynamic_value : float  (0.0–1.0)</text>
+  <text x="42" y="565" font-size="10" fill="#1a1a2e">sforzando : SforzandoEnum | null</text>
+  <text x="42" y="579" font-size="10" fill="#1a1a2e">dynamic_span_id : string | null  «FK»</text>
+  <text x="42" y="593" font-size="10" fill="#1a1a2e">dynamic_span_position : float | null</text>
+  <text x="42" y="607" font-size="10" fill="#1a1a2e">articulation : list[ArticulationEnum]</text>
+  <text x="42" y="621" font-size="10" fill="#1a1a2e">technique : list[TechniqueEnum]</text>
+  <text x="42" y="635" font-size="10" fill="#1a1a2e">attack : AttackEnum</text>
+  <text x="42" y="649" font-size="10" fill="#1a1a2e">release : ReleaseEnum</text>
+  <text x="42" y="663" font-size="10" fill="#1a1a2e">variant_index : int | null</text>
+  <text x="42" y="677" font-size="10" fill="#1a1a2e">collision_cluster_id : string | null  «FK»</text>
+  <line x1="30" y1="685" x2="340" y2="685" stroke="#C05621" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="42" y="700" font-size="10" fill="#555">+ to_json()</text>
+  <text x="42" y="714" font-size="10" fill="#555">+ from_xml(note, part)</text>
+  <text x="42" y="728" font-size="10" fill="#555">+ is_colliding_with(other)</text>
+  <text x="42" y="742" font-size="10" fill="#555">+ get_instrument()</text>
+  <text x="42" y="756" font-size="10" fill="#555">+ get_dynamic_value()</text>
+
+  <!-- SCORESECTION -->
+  <rect x="480" y="370" width="310" height="222" rx="6" fill="#E6F4EC" stroke="#276749" stroke-width="2"/>
+  <rect x="480" y="370" width="310" height="26"  rx="6" fill="#276749"/>
+  <text x="635" y="387" text-anchor="middle" font-size="12" font-weight="bold" fill="#FFF">ScoreSection</text>
+  <line x1="480" y1="396" x2="790" y2="396" stroke="#276749" stroke-width="1"/>
+  <text x="492" y="411" font-size="10" fill="#1a1a2e">section_id : string  «PK»</text>
+  <text x="492" y="425" font-size="10" fill="#1a1a2e">label : string  (free text)</text>
+  <text x="492" y="439" font-size="10" fill="#1a1a2e">is_auto_analyzed : bool</text>
+  <text x="492" y="453" font-size="10" fill="#1a1a2e">start_bar, start_beat : int</text>
+  <text x="492" y="467" font-size="10" fill="#1a1a2e">end_bar, end_beat : int</text>
+  <text x="492" y="481" font-size="10" fill="#1a1a2e">time_onset, time_duration : float</text>
+  <text x="492" y="495" font-size="10" fill="#1a1a2e">harmonic_events : list[HarmonicEvent]</text>
+  <line x1="480" y1="503" x2="790" y2="503" stroke="#276749" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="492" y="518" font-size="10" fill="#555">+ to_json()</text>
+  <text x="492" y="532" font-size="10" fill="#555">+ get_color_at(time: float)</text>
+  <text x="492" y="546" font-size="10" fill="#555">+ get_key_at(time: float)</text>
+
+  <!-- HARMONICEVENT embedded -->
+  <rect x="480" y="612" width="310" height="166" rx="6" fill="#B7DFC9" stroke="#276749" stroke-width="1.5"/>
+  <rect x="480" y="612" width="310" height="24"  rx="6" fill="#276749"/>
+  <text x="635" y="628" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFF">HarmonicEvent  «embedded»</text>
+  <line x1="480" y1="636" x2="790" y2="636" stroke="#276749" stroke-width="1"/>
+  <text x="492" y="651" font-size="10" fill="#1a1a2e">time_onset, time_duration : float</text>
+  <text x="492" y="665" font-size="10" fill="#1a1a2e">key_tonic : string</text>
+  <text x="492" y="679" font-size="10" fill="#1a1a2e">key_mode : MAJOR | MINOR</text>
+  <text x="492" y="693" font-size="10" fill="#1a1a2e">circle_of_fifths_pos : int  (0–11)</text>
+  <text x="492" y="707" font-size="10" fill="#1a1a2e">is_transitional : bool</text>
+  <text x="492" y="721" font-size="10" fill="#1a1a2e">is_auto_analyzed : bool</text>
+  <text x="492" y="743" font-size="9"  fill="#555" font-style="italic">* per ScoreSection  ·  1 = stable key  ·  N = modulating</text>
+  <text x="492" y="769" font-size="9"  fill="#888" font-style="italic">No color_hex — UI maps circle_of_fifths_pos to hue</text>
+
+  <!-- DYNAMICSPAN -->
+  <rect x="1080" y="370" width="310" height="258" rx="6" fill="#FFF8E6" stroke="#B7791F" stroke-width="2"/>
+  <rect x="1080" y="370" width="310" height="26"  rx="6" fill="#B7791F"/>
+  <text x="1235" y="387" text-anchor="middle" font-size="12" font-weight="bold" fill="#FFF">DynamicSpan</text>
+  <line x1="1080" y1="396" x2="1390" y2="396" stroke="#B7791F" stroke-width="1"/>
+  <text x="1092" y="411" font-size="10" fill="#1a1a2e">span_id : string  «PK»</text>
+  <text x="1092" y="425" font-size="10" fill="#1a1a2e">span_type : CRESCENDO | DIMINUENDO</text>
+  <text x="1092" y="439" font-size="10" fill="#1a1a2e">instrument_id : string  «FK»</text>
+  <text x="1092" y="453" font-size="10" fill="#1a1a2e">start_bar, start_beat : int</text>
+  <text x="1092" y="467" font-size="10" fill="#1a1a2e">end_bar, end_beat : int</text>
+  <text x="1092" y="481" font-size="10" fill="#1a1a2e">time_onset, time_duration : float</text>
+  <text x="1092" y="495" font-size="10" fill="#1a1a2e">dynamic_start : DynamicMarkingEnum</text>
+  <text x="1092" y="509" font-size="10" fill="#1a1a2e">dynamic_end : DynamicMarkingEnum</text>
+  <text x="1092" y="523" font-size="10" fill="#1a1a2e">shape : LINEAR | CONVEX | CONCAVE</text>
+  <text x="1092" y="537" font-size="10" fill="#1a1a2e">is_auto_analyzed : bool</text>
+  <line x1="1080" y1="545" x2="1390" y2="545" stroke="#B7791F" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="1092" y="560" font-size="10" fill="#555">+ to_json()</text>
+  <text x="1092" y="574" font-size="10" fill="#555">+ from_xml(hairpin, part)</text>
+  <text x="1092" y="588" font-size="10" fill="#555">+ get_value_at(position: float)</text>
+  <text x="1092" y="612" font-size="9"  fill="#888" font-style="italic">1 per instrument per hairpin</text>
+
+  <!-- ══════════════════════════════════════════════
+       ROW 3   y: 840–1160
+       CollisionCluster  x:30–420
+       ValidationResult  x:480–870
+  ══════════════════════════════════════════════ -->
+
+  <!-- COLLISIONCLUSTER -->
+  <rect x="30"  y="840" width="390" height="330" rx="6" fill="#F3E6F7" stroke="#7B2D8B" stroke-width="2"/>
+  <rect x="30"  y="840" width="390" height="26"  rx="6" fill="#7B2D8B"/>
+  <text x="225" y="857" text-anchor="middle" font-size="12" font-weight="bold" fill="#FFF">CollisionCluster</text>
+  <line x1="30" y1="866" x2="420" y2="866" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="42" y="881" font-size="10" fill="#1a1a2e">cluster_id : string  «PK»</text>
+  <text x="42" y="895" font-size="10" fill="#1a1a2e">note_ids : list[string]  «FK list»</text>
+  <text x="42" y="909" font-size="10" fill="#1a1a2e">instrument_ids : list[string]</text>
+  <text x="42" y="923" font-size="10" fill="#1a1a2e">time_onset : float</text>
+  <text x="42" y="937" font-size="10" fill="#1a1a2e">time_duration : float</text>
+  <text x="42" y="951" font-size="10" fill="#1a1a2e">pitch_center : int  (midi)</text>
+  <text x="42" y="965" font-size="10" fill="#1a1a2e">pitch_spread : int  (semitones)</text>
+  <text x="42" y="979" font-size="10" fill="#1a1a2e">is_unison : bool</text>
+  <text x="42" y="993" font-size="10" fill="#1a1a2e">family_pairs : list[string]</text>
+  <text x="42" y="1007" font-size="10" fill="#1a1a2e">strategy : StrategyEnum</text>
+  <text x="42" y="1021" font-size="10" fill="#1a1a2e">contour_pct : float  (0.0–1.0)</text>
+  <text x="42" y="1035" font-size="10" fill="#1a1a2e">shape_override : bool</text>
+  <text x="42" y="1049" font-size="10" fill="#1a1a2e">family_pair_rules : dict | null</text>
+  <text x="42" y="1063" font-size="10" fill="#1a1a2e">is_auto_analyzed : bool</text>
+  <line x1="30" y1="1071" x2="420" y2="1071" stroke="#7B2D8B" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="42" y="1086" font-size="10" fill="#555">+ to_json()</text>
+  <text x="42" y="1100" font-size="10" fill="#555">+ get_dominant_family_pair()</text>
+  <text x="42" y="1114" font-size="10" fill="#555">+ get_strategy()</text>
+  <text x="42" y="1128" font-size="10" fill="#555">+ get_contour_pct(instrument_a, instrument_b)</text>
+  <text x="42" y="1158" font-size="9"  fill="#888" font-style="italic">Populated by Collision Resolver pre-pass; empty at parse time</text>
+
+  <!-- VALIDATIONRESULT -->
+  <rect x="480" y="840" width="390" height="316" rx="6" fill="#FFF5F5" stroke="#C53030" stroke-width="2"/>
+  <rect x="480" y="840" width="390" height="26"  rx="6" fill="#C53030"/>
+  <text x="675" y="857" text-anchor="middle" font-size="12" font-weight="bold" fill="#FFF">ValidationResult</text>
+  <line x1="480" y1="866" x2="870" y2="866" stroke="#C53030" stroke-width="1"/>
+  <text x="492" y="881" font-size="10" fill="#1a1a2e">errors : list[ValidationMessage]</text>
+  <text x="492" y="895" font-size="10" fill="#1a1a2e">warnings : list[ValidationMessage]</text>
+  <text x="492" y="909" font-size="10" fill="#1a1a2e">suggestions : list[ValidationMessage]</text>
+  <text x="492" y="923" font-size="10" fill="#1a1a2e">is_valid : bool  (errors empty)</text>
+  <text x="492" y="937" font-size="10" fill="#1a1a2e">is_clean : bool  (warnings empty)</text>
+  <text x="492" y="951" font-size="10" fill="#1a1a2e">is_pristine : bool  (suggestions empty)</text>
+  <line x1="480" y1="959" x2="870" y2="959" stroke="#C53030" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="492" y="974" font-size="10" font-weight="bold" fill="#C53030">ValidationMessage  «embedded»</text>
+  <line x1="480" y1="982" x2="870" y2="982" stroke="#C53030" stroke-width="1"/>
+  <text x="492" y="997"  font-size="10" fill="#1a1a2e">level : ERROR | WARNING | SUGGESTION</text>
+  <text x="492" y="1011" font-size="10" fill="#1a1a2e">code : string</text>
+  <text x="492" y="1025" font-size="10" fill="#1a1a2e">message : string</text>
+  <text x="492" y="1039" font-size="10" fill="#1a1a2e">object_type : string</text>
+  <text x="492" y="1053" font-size="10" fill="#1a1a2e">object_ref : string | null</text>
+  <text x="492" y="1067" font-size="10" fill="#1a1a2e">bar : int | null</text>
+  <text x="492" y="1081" font-size="10" fill="#1a1a2e">suggestion : string | null</text>
+  <line x1="480" y1="1089" x2="870" y2="1089" stroke="#C53030" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="492" y="1104" font-size="10" fill="#555">+ (data container — no functions)</text>
+  <text x="492" y="1130" font-size="9"  fill="#888" font-style="italic">ERROR = blocks  ·  WARNING = proceed with flag  ·  SUGGESTION = draw attention</text>
+
+  <!-- ══════════════════════════════════════════════
+       ARROWS — each on its own exclusive corridor
+       
+       BLUE COMPOSITION (ScoreData owns):
+         A) ScoreData → InstrumentMeta   corridor y=338, x-left=185
+         B) ScoreData → NoteObject       corridor y=348, x-left=185
+         C) ScoreData → ScoreSection     straight down x=635
+         D) ScoreData → TempoEvent       right x=960, down to y=348, right to box
+         E) ScoreData → DynamicSpan      right x=972, down to y=358, right to box
+         F) ScoreData → CollisionCluster down x=510, corridor y=800, left to x=225
+         G) ScoreData → ValidationResult down x=522, corridor y=812, right to x=675
+
+       GREEN COMPOSITION:
+         ScoreSection → HarmonicEvent    straight down
+
+       FK DASHED:
+         NoteObject → InstrumentMeta     right x=356, up y=338, right to box bottom
+         NoteObject → DynamicSpan        right x=368, down y=820, right to box  
+         NoteObject → CollisionCluster   down from bottom x=185, to box top
+         DynamicSpan → InstrumentMeta    up from DynamicSpan x=1100, y=348, left to IM bottom
+  ══════════════════════════════════════════════ -->
+
+  <!-- A: ScoreData → InstrumentMeta  (corridor y=338) -->
+  <polyline points="530,315 530,338 185,338 185,315" fill="none" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#cd)"/>
+  <text x="350" y="330" font-size="9" fill="#2E75B6">1..*</text>
+
+  <!-- B: ScoreData → NoteObject  (corridor y=350) -->
+  <polyline points="545,315 545,350 185,350 185,370" fill="none" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#cd)"/>
+  <text x="340" y="343" font-size="9" fill="#2E75B6">0..*</text>
+
+  <!-- C: ScoreData → ScoreSection  (straight down) -->
+  <line x1="635" y1="315" x2="635" y2="370" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#cd)"/>
+  <text x="642" y="346" font-size="9" fill="#2E75B6">1..*</text>
+
+  <!-- D: ScoreData → TempoEvent  (right corridor x=960) -->
+  <polyline points="900,155 960,155 960,340 1080,340" fill="none" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#cd)"/>
+  <text x="968" y="148" font-size="9" fill="#2E75B6">1..*</text>
+
+  <!-- E: ScoreData → DynamicSpan  (right corridor x=978) -->
+  <polyline points="900,185 978,185 978,355 1080,355" fill="none" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#cd)"/>
+  <text x="986" y="178" font-size="9" fill="#2E75B6">0..*</text>
+
+  <!-- F: ScoreData → CollisionCluster  (down x=508, corridor y=800) -->
+  <polyline points="508,315 508,800 225,800 225,840" fill="none" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#cd)"/>
+  <text x="516" y="570" font-size="9" fill="#2E75B6">0..*</text>
+
+  <!-- G: ScoreData → ValidationResult  (down x=522, corridor y=814) -->
+  <polyline points="522,315 522,814 675,814 675,840" fill="none" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#cd)"/>
+  <text x="530" y="600" font-size="9" fill="#2E75B6">1</text>
+
+  <!-- ScoreSection → HarmonicEvent  (straight down) -->
+  <line x1="635" y1="592" x2="635" y2="612" stroke="#276749" stroke-width="1.8" marker-end="url(#cg)"/>
+  <text x="642" y="606" font-size="9" fill="#276749">1..*</text>
+
+  <!-- FK: NoteObject → InstrumentMeta  (right x=358, up to corridor y=338) -->
+  <polyline points="340,481 358,481 358,338 340,338" fill="none" stroke="#C05621" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#fko)"/>
+  <text x="362" y="414" font-size="9" fill="#C05621">«FK»</text>
+
+  <!-- FK: NoteObject → DynamicSpan  (right x=370, down to corridor y=826, right to DynamicSpan) -->
+  <polyline points="340,579 370,579 370,826 1080,826 1080,480" fill="none" stroke="#C05621" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#fko)"/>
+  <text x="700" y="820" text-anchor="middle" font-size="9" fill="#C05621">«FK» dynamic_span_id</text>
+
+  <!-- FK: NoteObject → CollisionCluster  (straight down from x=185) -->
+  <polyline points="185,768 185,840" fill="none" stroke="#C05621" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#fko)"/>
+  <text x="192" y="808" font-size="9" fill="#C05621">«FK»</text>
+
+  <!-- FK: DynamicSpan → InstrumentMeta  (up from DynamicSpan, corridor y=338, left to IM right edge) -->
+  <polyline points="1100,370 1100,338 340,338" fill="none" stroke="#B7791F" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#fka)"/>
+  <text x="730" y="330" text-anchor="middle" font-size="9" fill="#B7791F">«FK» instrument_id</text>
+
+  <!-- ══════════════════════════════════════════════
+       LEGEND
+  ══════════════════════════════════════════════ -->
+  <rect x="940" y="840" width="520" height="170" rx="6" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1.5"/>
+  <text x="1200" y="860" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a1a2e">Relationship Legend</text>
+  <line x1="956" y1="868" x2="1448" y2="868" stroke="#CCCCCC" stroke-width="1"/>
+
+  <line x1="960" y1="886" x2="1020" y2="886" stroke="#2E75B6" stroke-width="2"/>
+  <polygon points="1016,881 1024,886 1016,891" fill="#2E75B6"/>
+  <text x="1032" y="890" font-size="10" fill="#333">Composition — ScoreData owns the target collection</text>
+
+  <line x1="960" y1="910" x2="1020" y2="910" stroke="#276749" stroke-width="2"/>
+  <polygon points="1016,905 1024,910 1016,915" fill="#276749"/>
+  <text x="1032" y="914" font-size="10" fill="#333">Composition — ScoreSection owns HarmonicEvent list</text>
+
+  <line x1="960" y1="934" x2="1020" y2="934" stroke="#C05621" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <path d="M1016,929 L1024,934 L1016,939 z" fill="#C05621"/>
+  <text x="1032" y="938" font-size="10" fill="#333">FK Reference — NoteObject references target by id</text>
+
+  <line x1="960" y1="958" x2="1020" y2="958" stroke="#B7791F" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <path d="M1016,953 L1024,958 L1016,963 z" fill="#B7791F"/>
+  <text x="1032" y="962" font-size="10" fill="#333">FK Reference — DynamicSpan references InstrumentMeta</text>
+
+  <text x="960" y="990" font-size="9" fill="#888" font-style="italic">All arrows routed along named corridors — no diagonal crossings through boxes.</text>
+
+  <!-- MARKERS -->
+  <defs>
+    <marker id="cd" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto">
+      <polygon points="0,5 4,1 8,5 4,9" fill="#2E75B6"/>
+    </marker>
+    <marker id="cg" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto">
+      <polygon points="0,5 4,1 8,5 4,9" fill="#276749"/>
+    </marker>
+    <marker id="fko" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#C05621"/>
+    </marker>
+    <marker id="fka" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#B7791F"/>
+    </marker>
+  </defs>
+
+</svg>

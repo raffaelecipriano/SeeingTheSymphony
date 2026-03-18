@@ -1,0 +1,239 @@
+<svg viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+
+  <rect width="1200" height="720" fill="#F8F9FA" rx="8"/>
+  <text x="600" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a1a2e">Seeing the Symphony — Parsing Pipeline &amp; File Structure</text>
+  <line x1="40" y1="40" x2="1160" y2="40" stroke="#2E75B6" stroke-width="2"/>
+
+  <!--
+    CORRIDOR MAP — every arrow gets its own lane:
+
+    Vertical down-lanes (input → parse phase):
+      x=150  MusicXML → Parse box
+      x=550  Profile → Config Cascade  (via right turn at y=170)
+      x=940  CIL → Hash Check          (via left turn at y=162)
+      x=960  CIL → Config Cascade      (via left turn at y=170)
+
+    Horizontal corridor between rows 1 and 2:
+      y=162  CIL → Hash Check
+      y=170  Profile → Config Cascade  /  CIL → Config Cascade
+
+    Vertical down-lanes into ScoreData (row 3):
+      x=430  Parse box → ScoreData     (own vertical lane)
+      x=710  Hash Check → ScoreData    (down then left)
+      x=730  Config Cascade → ScoreData (down then left)
+
+    Horizontal corridor between rows 2 and 3:
+      y=348  all three converge horizontally before ScoreData
+
+    ScoreData → pre-render passes: straight down on x=280, x=550, x=820
+    Pre-render → Render-Ready:     straight down on x=280, x=550, x=820
+  -->
+
+  <!-- ══════════════════════════════════════
+       ROW 1 — INPUT FILES   y:56–148
+  ══════════════════════════════════════ -->
+  <text x="600" y="62" text-anchor="middle" font-size="10" font-weight="bold" fill="#999" letter-spacing="3">INPUT FILES</text>
+
+  <!-- MusicXML -->
+  <rect x="60"  y="70" width="190" height="72" rx="8" fill="#D5E8F0" stroke="#2E75B6" stroke-width="2"/>
+  <text x="155" y="93"  text-anchor="middle" font-size="12" font-weight="bold" fill="#2E75B6">MusicXML File</text>
+  <text x="155" y="109" text-anchor="middle" font-size="10" fill="#444">.xml / .mxl</text>
+  <text x="155" y="124" text-anchor="middle" font-size="10" fill="#444">score · parts · metadata</text>
+
+  <!-- Conductor Profile -->
+  <rect x="505" y="70" width="190" height="72" rx="8" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="2"/>
+  <text x="600" y="93"  text-anchor="middle" font-size="12" font-weight="bold" fill="#7B2D8B">Conductor Profile</text>
+  <text x="600" y="109" text-anchor="middle" font-size="10" fill="#444">.json</text>
+  <text x="600" y="124" text-anchor="middle" font-size="10" fill="#444">personal viz preferences</text>
+
+  <!-- CIL File -->
+  <rect x="950" y="70" width="190" height="72" rx="8" fill="#FCD5B5" stroke="#C05621" stroke-width="2"/>
+  <text x="1045" y="93"  text-anchor="middle" font-size="12" font-weight="bold" fill="#C05621">CIL File</text>
+  <text x="1045" y="109" text-anchor="middle" font-size="10" fill="#444">.json (score-specific)</text>
+  <text x="1045" y="124" text-anchor="middle" font-size="10" fill="#444">interpretation overrides</text>
+
+  <!-- ══════════════════════════════════════
+       ROW 2 — PARSE PHASE + HASH + CASCADE
+       y:188–340
+  ══════════════════════════════════════ -->
+  <text x="310" y="184" text-anchor="middle" font-size="10" font-weight="bold" fill="#999" letter-spacing="3">PARSE PHASE  —  Python · music21</text>
+
+  <!-- Parse phase outer box -->
+  <rect x="60"  y="194" width="560" height="140" rx="8" fill="#F3E6F7" stroke="#7B2D8B" stroke-width="1.5"/>
+
+  <!-- Step ① -->
+  <rect x="76"  y="206" width="160" height="44" rx="5" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="156" y="224" text-anchor="middle" font-size="10" font-weight="bold" fill="#1a1a2e">① Score Parser</text>
+  <text x="156" y="239" text-anchor="middle" font-size="9" fill="#444">InstrumentMeta · NoteObject</text>
+
+  <!-- Step ② -->
+  <rect x="252" y="206" width="160" height="44" rx="5" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="332" y="224" text-anchor="middle" font-size="10" font-weight="bold" fill="#1a1a2e">② Harmonic Analyzer</text>
+  <text x="332" y="239" text-anchor="middle" font-size="9" fill="#444">ScoreSection · HarmonicEvent</text>
+
+  <!-- Step ③ -->
+  <rect x="428" y="206" width="174" height="44" rx="5" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="515" y="224" text-anchor="middle" font-size="10" font-weight="bold" fill="#1a1a2e">③ Phrase Segmenter</text>
+  <text x="515" y="239" text-anchor="middle" font-size="9" fill="#444">section boundaries</text>
+
+  <!-- Step ④ -->
+  <rect x="76"  y="264" width="160" height="44" rx="5" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="156" y="282" text-anchor="middle" font-size="10" font-weight="bold" fill="#1a1a2e">④ Tempo Extractor</text>
+  <text x="156" y="297" text-anchor="middle" font-size="9" fill="#444">TempoEvent · time_onset</text>
+
+  <!-- Step ⑤ -->
+  <rect x="252" y="264" width="160" height="44" rx="5" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="332" y="282" text-anchor="middle" font-size="10" font-weight="bold" fill="#1a1a2e">⑤ Dynamic Extractor</text>
+  <text x="332" y="297" text-anchor="middle" font-size="9" fill="#444">DynamicSpan · span_position</text>
+
+  <!-- Step ⑥ -->
+  <rect x="428" y="264" width="174" height="44" rx="5" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="515" y="282" text-anchor="middle" font-size="10" font-weight="bold" fill="#1a1a2e">⑥ Auto-Annotator</text>
+  <text x="515" y="297" text-anchor="middle" font-size="9" fill="#444">draft interpretation JSON</text>
+
+  <!-- Hash Check box — right column top -->
+  <rect x="680" y="194" width="200" height="78" rx="8" fill="#FFF5F5" stroke="#C53030" stroke-width="1.5"/>
+  <text x="780" y="218" text-anchor="middle" font-size="11" font-weight="bold" fill="#C53030">⑦ Hash Check</text>
+  <text x="780" y="234" text-anchor="middle" font-size="10" fill="#444">compare musicxml_hash</text>
+  <text x="780" y="249" text-anchor="middle" font-size="10" fill="#444">vs CIL stored hash</text>
+  <text x="780" y="263" text-anchor="middle" font-size="9"  fill="#C53030">mismatch → WARNING</text>
+
+  <!-- Config Cascade box — right column bottom -->
+  <rect x="680" y="288" width="200" height="50" rx="8" fill="#FEF9E6" stroke="#975A16" stroke-width="1.5"/>
+  <text x="780" y="309" text-anchor="middle" font-size="11" font-weight="bold" fill="#975A16">⑧ Config Cascade</text>
+  <text x="780" y="326" text-anchor="middle" font-size="10" fill="#444">Defaults → Profile → CIL</text>
+
+  <!-- ══════════════════════════════════════
+       ROW 3 — SCOREDATA   y:370–448
+  ══════════════════════════════════════ -->
+  <rect x="240" y="370" width="640" height="72" rx="8" fill="#D5E8F0" stroke="#2E75B6" stroke-width="2.5"/>
+  <text x="560" y="394" text-anchor="middle" font-size="13" font-weight="bold" fill="#2E75B6">ScoreData  (in-memory)</text>
+  <text x="560" y="412" text-anchor="middle" font-size="10" fill="#444">InstrumentMeta · NoteObject · ScoreSection · DynamicSpan · TempoEvent</text>
+  <text x="560" y="428" text-anchor="middle" font-size="10" fill="#444">CollisionCluster (empty at this stage) · ValidationResult</text>
+
+  <!-- ══════════════════════════════════════
+       ROW 4 — PRE-RENDER PASSES   y:470–546
+  ══════════════════════════════════════ -->
+  <text x="600" y="466" text-anchor="middle" font-size="10" font-weight="bold" fill="#999" letter-spacing="3">PRE-RENDER PASSES</text>
+
+  <!-- Shape Variant -->
+  <rect x="170" y="476" width="210" height="64" rx="8" fill="#FEF0E6" stroke="#C05621" stroke-width="1.5"/>
+  <text x="275" y="498" text-anchor="middle" font-size="11" font-weight="bold" fill="#C05621">⑨ Shape Variant</text>
+  <text x="275" y="514" text-anchor="middle" font-size="10" fill="#444">assign variant_index</text>
+  <text x="275" y="529" text-anchor="middle" font-size="10" fill="#444">to each NoteObject</text>
+
+  <!-- Collision Resolver -->
+  <rect x="455" y="476" width="210" height="64" rx="8" fill="#E6F4EC" stroke="#276749" stroke-width="1.5"/>
+  <text x="560" y="498" text-anchor="middle" font-size="11" font-weight="bold" fill="#276749">⑩ Collision Resolver</text>
+  <text x="560" y="514" text-anchor="middle" font-size="10" fill="#444">build CollisionClusters</text>
+  <text x="560" y="529" text-anchor="middle" font-size="10" fill="#444">stamp collision_cluster_id</text>
+
+  <!-- Validate -->
+  <rect x="740" y="476" width="210" height="64" rx="8" fill="#FFF5F5" stroke="#C53030" stroke-width="1.5"/>
+  <text x="845" y="498" text-anchor="middle" font-size="11" font-weight="bold" fill="#C53030">⑪ Validate</text>
+  <text x="845" y="514" text-anchor="middle" font-size="10" fill="#444">ERROR · WARNING</text>
+  <text x="845" y="529" text-anchor="middle" font-size="10" fill="#444">SUGGESTION</text>
+
+  <!-- ══════════════════════════════════════
+       ROW 5 — RENDER-READY   y:580–640
+  ══════════════════════════════════════ -->
+  <rect x="240" y="580" width="640" height="56" rx="8" fill="#B7DFC9" stroke="#276749" stroke-width="2.5"/>
+  <text x="560" y="604" text-anchor="middle" font-size="13" font-weight="bold" fill="#276749">Render-Ready ScoreData</text>
+  <text x="560" y="622" text-anchor="middle" font-size="10" fill="#276749">handed to Authoring UI · FastAPI · Cairo Renderer</text>
+
+  <!-- ══════════════════════════════════════
+       LEGEND
+  ══════════════════════════════════════ -->
+  <rect x="960" y="370" width="200" height="190" rx="6" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1.2"/>
+  <text x="1060" y="390" text-anchor="middle" font-size="10" font-weight="bold" fill="#1a1a2e">File Type Legend</text>
+  <line x1="974" y1="396" x2="1148" y2="396" stroke="#CCCCCC" stroke-width="1"/>
+  <rect x="974" y="404" width="90" height="18" rx="3" fill="#D5E8F0" stroke="#2E75B6" stroke-width="1"/>
+  <text x="1019" y="417" text-anchor="middle" font-size="9" fill="#2E75B6">MusicXML</text>
+  <rect x="974" y="428" width="90" height="18" rx="3" fill="#E0C8ED" stroke="#7B2D8B" stroke-width="1"/>
+  <text x="1019" y="441" text-anchor="middle" font-size="9" fill="#7B2D8B">Profile .json</text>
+  <rect x="974" y="452" width="90" height="18" rx="3" fill="#FCD5B5" stroke="#C05621" stroke-width="1"/>
+  <text x="1019" y="465" text-anchor="middle" font-size="9" fill="#C05621">CIL .json</text>
+  <rect x="974" y="476" width="90" height="18" rx="3" fill="#D5E8F0" stroke="#2E75B6" stroke-width="1.5"/>
+  <text x="1019" y="489" text-anchor="middle" font-size="9" fill="#2E75B6">ScoreData</text>
+  <rect x="974" y="500" width="90" height="18" rx="3" fill="#B7DFC9" stroke="#276749" stroke-width="1.5"/>
+  <text x="1019" y="513" text-anchor="middle" font-size="9" fill="#276749">Render-Ready</text>
+  <line x1="974" y1="526" x2="1148" y2="526" stroke="#CCCCCC" stroke-width="1"/>
+  <line x1="974" y1="536" x2="1010" y2="536" stroke="#444" stroke-width="1.5" marker-end="url(#leg)"/>
+  <text x="1018" y="540" font-size="9" fill="#444">flow / sequence</text>
+  <line x1="974" y1="552" x2="1010" y2="552" stroke="#C05621" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#legO)"/>
+  <text x="1018" y="556" font-size="9" fill="#C05621">optional / secondary</text>
+
+  <!-- ══════════════════════════════════════
+       ARROWS — all orthogonal, no crossings
+
+       CORRIDOR PLAN:
+       1. MusicXML → Parse:         straight down x=155
+       2. Profile → Cascade:        down to y=162, right to x=780, down to box
+       3. CIL → Hash Check:         left to x=940, down to y=156, left to box right edge
+       4. CIL → Config Cascade:     left to x=956, down to y=170, left to box right edge
+       5. Parse → ScoreData:        down from box bottom center x=340, corridor y=352
+       6. Hash Check → ScoreData:   down from box, corridor y=352, left to ScoreData
+       7. Config Cascade → ScoreData: down from box, corridor y=352, left to ScoreData
+       8. ScoreData → ShapeVariant:  down x=275
+       9. ScoreData → Collision:     down x=560
+      10. ScoreData → Validate:      down x=845
+      11. Shape → Render:            down x=275
+      12. Collision → Render:        down x=560
+      13. Validate → Render:         down x=845
+  ══════════════════════════════════════ -->
+
+  <!-- 1. MusicXML → Parse (straight down) -->
+  <line x1="155" y1="142" x2="155" y2="194" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#aB)"/>
+
+  <!-- 2. Profile → Config Cascade (down, right along y=162, down) -->
+  <polyline points="600,142 600,162 780,162 780,288" fill="none" stroke="#7B2D8B" stroke-width="1.8" marker-end="url(#aP)"/>
+  <text x="700" y="155" text-anchor="middle" font-size="9" fill="#7B2D8B">viz preferences</text>
+
+  <!-- 3. CIL → Hash Check (left along y=156, then down to box) -->
+  <polyline points="1045,142 1045,156 880,156 880,194" fill="none" stroke="#C05621" stroke-width="1.8" marker-end="url(#aO)"/>
+  <text x="965" y="149" text-anchor="middle" font-size="9" fill="#C05621">hash comparison</text>
+
+  <!-- 4. CIL → Config Cascade (left along y=170, down to box) — dashed = secondary -->
+  <polyline points="1045,142 1045,170 900,170 900,338 880,338" fill="none" stroke="#C05621" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#aO)"/>
+  <text x="980" y="163" text-anchor="middle" font-size="9" fill="#C05621">overrides</text>
+
+  <!-- 5. Parse → ScoreData (down from bottom of parse box, corridor y=352) -->
+  <polyline points="340,334 340,352 430,352 430,370" fill="none" stroke="#7B2D8B" stroke-width="1.8" marker-end="url(#aP)"/>
+
+  <!-- 6. Hash Check → ScoreData (down from bottom, corridor y=352, left) -->
+  <polyline points="730,272 730,352 620,352 620,370" fill="none" stroke="#C53030" stroke-width="1.8" marker-end="url(#aR)"/>
+
+  <!-- 7. Config Cascade → ScoreData (down from bottom, corridor y=352, left) -->
+  <polyline points="750,338 750,360 700,360 700,370" fill="none" stroke="#975A16" stroke-width="1.8" marker-end="url(#aA)"/>
+
+  <!-- 8. ScoreData → Shape Variant (straight down) -->
+  <line x1="345" y1="442" x2="275" y2="476" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#aB)"/>
+
+  <!-- 9. ScoreData → Collision Resolver (straight down) -->
+  <line x1="560" y1="442" x2="560" y2="476" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#aB)"/>
+
+  <!-- 10. ScoreData → Validate (straight down) -->
+  <line x1="775" y1="442" x2="845" y2="476" stroke="#2E75B6" stroke-width="1.8" marker-end="url(#aB)"/>
+
+  <!-- 11. Shape Variant → Render-Ready (straight down) -->
+  <line x1="275" y1="540" x2="370" y2="580" stroke="#C05621" stroke-width="1.8" marker-end="url(#aG)"/>
+
+  <!-- 12. Collision Resolver → Render-Ready (straight down) -->
+  <line x1="560" y1="540" x2="560" y2="580" stroke="#276749" stroke-width="1.8" marker-end="url(#aG)"/>
+
+  <!-- 13. Validate → Render-Ready (straight down) -->
+  <line x1="845" y1="540" x2="750" y2="580" stroke="#C53030" stroke-width="1.8" marker-end="url(#aG)"/>
+
+  <!-- ARROW MARKERS -->
+  <defs>
+    <marker id="aB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#2E75B6"/></marker>
+    <marker id="aP" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#7B2D8B"/></marker>
+    <marker id="aO" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#C05621"/></marker>
+    <marker id="aR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#C53030"/></marker>
+    <marker id="aA" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#975A16"/></marker>
+    <marker id="aG" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#276749"/></marker>
+    <marker id="leg"  markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#444"/></marker>
+    <marker id="legO" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#C05621"/></marker>
+  </defs>
+
+</svg>
