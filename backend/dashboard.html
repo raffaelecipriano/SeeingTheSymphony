@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seeing the Symphony — Parse Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0d0d14;
+    color: #e0dff5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+  }
+  h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 0.85rem; color: #8884a8; margin-bottom: 2rem; }
+  .card {
+    background: #17172a;
+    border: 1px solid #2a2a45;
+    border-radius: 12px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 780px;
+    margin-bottom: 1.5rem;
+  }
+  .card h2 { font-size: 1rem; font-weight: 600; color: #a09ec8; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* Upload zone */
+  #drop-zone {
+    border: 2px dashed #3a3a60;
+    border-radius: 10px;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  #drop-zone.drag-over { border-color: #7c6fff; background: #1e1e38; }
+  #drop-zone p { color: #7a789a; font-size: 0.9rem; }
+  #drop-zone strong { color: #c5c3e8; }
+  #file-input { display: none; }
+  .btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.55rem 1.4rem;
+    background: #5a4fff;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: #7c6fff; }
+
+  /* Progress indicator */
+  #progress-section { display: none; margin-top: 1.25rem; }
+  .progress-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
+  .progress-label { font-size: 0.85rem; color: #c5c3e8; font-weight: 500; }
+  .progress-elapsed { font-size: 0.78rem; color: #6a688a; font-variant-numeric: tabular-nums; }
+  .progress-track { background: #1e1e38; border-radius: 6px; height: 6px; overflow: hidden; }
+  .progress-bar { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #3a2aaa, #5a4fff, #7c6fff, #4fa8ff, #5a4fff, #3a2aaa); background-size: 300% 100%; animation: shimmer 1.8s linear infinite; }
+  @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+  .progress-sub { margin-top: 0.45rem; font-size: 0.75rem; color: #6a688a; }
+
+  /* Stage list */
+  .stage-list { display: flex; flex-direction: column; gap: 0; margin-top: 1rem; border: 1px solid #2a2a45; border-radius: 8px; overflow: hidden; }
+  .stage-row { display: flex; align-items: center; gap: 0.65rem; padding: 0.45rem 0.85rem; font-size: 0.82rem; border-top: 1px solid #2a2a45; transition: background 0.2s; }
+  .stage-row:first-child { border-top: none; }
+  .stage-row.pending  { color: #4a4a6a; }
+  .stage-row.active   { background: #1a1a30; color: #c5c3e8; }
+  .stage-row.done     { color: #5a8a6a; }
+  .stage-icon { width: 14px; text-align: center; flex-shrink: 0; font-size: 0.75rem; }
+  .stage-row.active .stage-icon { color: #7c6fff; animation: pulse-icon 1s ease-in-out infinite; }
+  @keyframes pulse-icon { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* Error */
+  #error-box { display: none; background: #2a1020; border: 1px solid #7a2040; border-radius: 8px; padding: 1rem; color: #f08080; font-size: 0.85rem; white-space: pre-wrap; margin-top: 1rem; }
+
+  /* Results */
+  #results { display: none; }
+
+  /* Score meta */
+  .meta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; }
+  .meta-item { background: #1e1e38; border-radius: 8px; padding: 0.75rem 1rem; }
+  .meta-item .label { font-size: 0.7rem; color: #6a688a; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+  .meta-item .value { font-size: 0.9rem; font-weight: 600; color: #d0ceee; }
+
+  /* Instrument list */
+  .inst-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .inst-tag { font-size: 0.75rem; padding: 0.25rem 0.65rem; border-radius: 20px; font-weight: 500; }
+  .STRINGS    { background: #1a3a2a; color: #6ddb9a; border: 1px solid #2a5a3a; }
+  .WOODWINDS  { background: #1a2a3a; color: #6db8db; border: 1px solid #2a4a6a; }
+  .BRASS      { background: #3a2a10; color: #dbb06d; border: 1px solid #6a4a20; }
+  .PERCUSSION { background: #2a1a3a; color: #b06ddb; border: 1px solid #4a2a6a; }
+  .KEYBOARD   { background: #3a1a1a; color: #db6d6d; border: 1px solid #6a2a2a; }
+  .VOICE      { background: #1a3a3a; color: #6ddbdb; border: 1px solid #2a6a6a; }
+
+  /* Timing */
+  .timing-table { width: 100%; border-collapse: collapse; }
+  .timing-table tr + tr td { border-top: 1px solid #1e1e38; }
+  .timing-table td { padding: 0.55rem 0; vertical-align: middle; }
+  .timing-table .step-name { color: #c5c3e8; font-size: 0.85rem; width: 230px; white-space: nowrap; }
+  .timing-table .bar-cell { padding-right: 0.5rem; }
+  .bar-track { background: #1e1e38; border-radius: 4px; height: 14px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+  .timing-table .ms-val { text-align: right; font-size: 0.82rem; color: #8884a8; white-space: nowrap; width: 80px; }
+  .total-row td { border-top: 1px solid #3a3a60 !important; padding-top: 0.75rem !important; }
+  .total-row .step-name { color: #e0dff5; font-weight: 600; }
+  .total-row .ms-val { color: #c5c3e8; font-weight: 600; }
+
+  /* Sections */
+  .section-list { display: flex; flex-direction: column; gap: 0.4rem; }
+  .section-item { background: #1e1e38; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.82rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+  .sec-label { color: #c5c3e8; }
+  .sec-key { color: #7c6fff; font-weight: 500; }
+  .sec-bars { color: #6a688a; font-size: 0.75rem; white-space: nowrap; }
+  .auto-badge { font-size: 0.65rem; background: #2a2a10; color: #a89a50; border: 1px solid #4a4a20; border-radius: 10px; padding: 0.1rem 0.4rem; margin-left: 0.4rem; }
+
+  /* JSON viewer */
+  .json-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; gap: 0.5rem; flex-wrap: wrap; }
+  .json-header h2 { margin-bottom: 0; }
+  .json-controls { display: flex; gap: 0.5rem; align-items: center; }
+  .json-search {
+    background: #1e1e38; border: 1px solid #2a2a45; border-radius: 6px;
+    color: #e0dff5; font-size: 0.8rem; padding: 0.3rem 0.6rem; width: 180px; outline: none;
+  }
+  .json-search:focus { border-color: #5a4fff; }
+  .icon-btn {
+    background: #1e1e38; border: 1px solid #2a2a45; border-radius: 6px;
+    color: #a09ec8; font-size: 0.8rem; padding: 0.3rem 0.7rem; cursor: pointer;
+    transition: background 0.15s, color 0.15s; white-space: nowrap;
+  }
+  .icon-btn:hover { background: #2a2a50; color: #e0dff5; }
+  #json-pre {
+    background: #0d0d14; border: 1px solid #1e1e38; border-radius: 8px;
+    padding: 1rem 1.1rem; overflow: auto; max-height: 520px;
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.78rem; line-height: 1.6; white-space: pre; tab-size: 2;
+  }
+  .j-key  { color: #7c9fff; }
+  .j-str  { color: #7ddb96; }
+  .j-num  { color: #ffb86c; }
+  .j-bool { color: #ff79c6; }
+  .j-null { color: #8884a8; }
+  .j-hl   { background: #3a3a10; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<h1>Seeing the Symphony</h1>
+<p class="subtitle">Parse Pipeline Dashboard</p>
+
+<div class="card">
+  <h2>Upload Score</h2>
+  <div id="drop-zone">
+    <input type="file" id="file-input" accept=".xml,.mxl,.musicxml">
+    <p><strong>Drop a MusicXML file here</strong></p>
+    <p style="margin-top:0.3rem">or</p>
+    <button class="btn" id="browse-btn">Browse file</button>
+  </div>
+  <div id="progress-section">
+    <div class="progress-header">
+      <span class="progress-label" id="progress-label">Uploading&hellip;</span>
+      <span class="progress-elapsed" id="progress-elapsed"></span>
+    </div>
+    <div class="progress-track"><div class="progress-bar"></div></div>
+    <div class="progress-sub" id="progress-sub"></div>
+    <div class="stage-list" id="stage-list" style="display:none"></div>
+  </div>
+  <div id="error-box"></div>
+</div>
+
+<div id="results">
+  <div class="card">
+    <h2>Score Info</h2>
+    <div class="meta-grid" id="meta-grid"></div>
+  </div>
+
+  <div class="card">
+    <h2>Instruments</h2>
+    <div class="inst-list" id="inst-list"></div>
+  </div>
+
+  <div class="card">
+    <h2>Pipeline Timing</h2>
+    <table class="timing-table" id="timing-table"></table>
+  </div>
+
+  <div class="card" id="sections-card" style="display:none">
+    <h2>Sections</h2>
+    <div class="section-list" id="section-list"></div>
+  </div>
+
+  <div class="card">
+    <div class="json-header">
+      <h2>ScoreData Object</h2>
+      <div class="json-controls">
+        <input class="json-search" id="json-search" type="text" placeholder="Search key or value&hellip;">
+        <button class="icon-btn" id="copy-btn">Copy</button>
+        <button class="icon-btn" id="toggle-btn">Collapse</button>
+      </div>
+    </div>
+    <pre id="json-pre"></pre>
+  </div>
+</div>
+
+<script>
+var STEP_LABELS = {
+  music21_parse_ms:     'music21 parse + sounding pitch',
+  tempo_extractor_ms:   'Tempo Extractor',
+  score_parser_ms:      'Score Parser (notes)',
+  dynamic_extractor_ms: 'Dynamic Extractor',
+  harmonic_analyzer_ms: 'Harmonic Analyzer',
+  auto_annotator_ms:    'Auto-Annotator',
+  shape_variant_ms:     'Shape Variant Pre-pass'
+};
+
+var BAR_COLORS = ['#5a4fff','#7c6fff','#4fa8ff','#4fdbbf','#a06fff','#ff7c9a','#ffb86c'];
+
+var PIPELINE_STAGES = [
+  { key: 'music21_parse',     label: 'music21 parse' },
+  { key: 'tempo_extractor',   label: 'Tempo Extractor' },
+  { key: 'score_parser',      label: 'Score Parser' },
+  { key: 'dynamic_extractor', label: 'Dynamic Extractor' },
+  { key: 'harmonic_analyzer', label: 'Harmonic Analyzer' },
+  { key: 'auto_annotator',    label: 'Auto-Annotator' },
+  { key: 'shape_variant',     label: 'Shape Variant Pre-pass' },
+];
+
+function renderStages(activeKey) {
+  var list = document.getElementById('stage-list');
+  var activeIdx = PIPELINE_STAGES.findIndex(function(s) { return s.key === activeKey; });
+  list.innerHTML = PIPELINE_STAGES.map(function(s, i) {
+    var state = i < activeIdx ? 'done' : i === activeIdx ? 'active' : 'pending';
+    var icon  = state === 'done' ? '✓' : state === 'active' ? '●' : '○';
+    return '<div class="stage-row ' + state + '">' +
+      '<span class="stage-icon">' + icon + '</span>' +
+      '<span>' + s.label + '</span>' +
+      '</div>';
+  }).join('');
+  list.style.display = 'flex';
+}
+
+// ── Upload ──────────────────────────────────────────────────────────────────
+var dropZone  = document.getElementById('drop-zone');
+var fileInput = document.getElementById('file-input');
+var browseBtn = document.getElementById('browse-btn');
+
+browseBtn.addEventListener('click', function() { fileInput.click(); });
+fileInput.addEventListener('change', function() {
+  if (fileInput.files.length) parseFile(fileInput.files[0]);
+});
+dropZone.addEventListener('dragover', function(e) {
+  e.preventDefault();
+  dropZone.classList.add('drag-over');
+});
+dropZone.addEventListener('dragleave', function() {
+  dropZone.classList.remove('drag-over');
+});
+dropZone.addEventListener('drop', function(e) {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  if (e.dataTransfer.files.length) parseFile(e.dataTransfer.files[0]);
+});
+
+function fmt(seconds) {
+  var m = Math.floor(seconds / 60);
+  var s = (seconds % 60).toFixed(1);
+  return m > 0 ? m + 'm ' + s + 's' : s + 's';
+}
+
+// ── Progress helpers ─────────────────────────────────────────────────────────
+var _timerInterval = null;
+var _startTime = 0;
+
+function startProgress(label, sub) {
+  _startTime = Date.now();
+  document.getElementById('progress-label').textContent = label;
+  document.getElementById('progress-sub').textContent = sub || '';
+  document.getElementById('progress-elapsed').textContent = '0.0 s';
+  document.getElementById('progress-section').style.display = 'block';
+  clearInterval(_timerInterval);
+  _timerInterval = setInterval(function() {
+    var elapsed = ((Date.now() - _startTime) / 1000).toFixed(1);
+    document.getElementById('progress-elapsed').textContent = elapsed + ' s';
+  }, 100);
+}
+
+function setProgressLabel(label, sub) {
+  document.getElementById('progress-label').textContent = label;
+  if (sub !== undefined) document.getElementById('progress-sub').textContent = sub;
+}
+
+function stopProgress() {
+  clearInterval(_timerInterval);
+  document.getElementById('progress-section').style.display = 'none';
+  document.getElementById('stage-list').style.display = 'none';
+}
+
+// ── Upload & parse ───────────────────────────────────────────────────────────
+function parseFile(file) {
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('error-box').style.display = 'none';
+  document.getElementById('error-box').textContent = '';
+
+  startProgress('Uploading\u2026', file.name);
+
+  var form = new FormData();
+  form.append('file', file);
+
+  fetch('/parse', { method: 'POST', body: form })
+    .then(function(resp) {
+      return resp.json().then(function(data) {
+        if (!resp.ok) {
+          throw new Error(data.detail || JSON.stringify(data, null, 2));
+        }
+        return data.job_id;
+      });
+    })
+    .then(function(jobId) {
+      setProgressLabel('Parsing score\u2026', 'Running pipeline in background \u2014 results will appear automatically');
+      return pollStatus(jobId);
+    })
+    .then(function(scoreData) {
+      renderResults(scoreData);
+    })
+    .catch(function(err) {
+      showError(String(err));
+    })
+    .finally(function() {
+      stopProgress();
+    });
+}
+
+function pollStatus(jobId) {
+  return new Promise(function(resolve, reject) {
+    function check() {
+      fetch('/parse/status/' + jobId)
+        .then(function(resp) { return resp.json(); })
+        .then(function(data) {
+          if (data.status === 'complete') {
+            resolve(data.data);
+          } else if (data.status === 'error') {
+            reject(new Error(data.detail || 'Parse failed.'));
+          } else {
+            if (data.stage) renderStages(data.stage);
+            setTimeout(check, 500);
+          }
+        })
+        .catch(reject);
+    }
+    check();
+  });
+}
+
+function showError(msg) {
+  var box = document.getElementById('error-box');
+  box.textContent = msg;
+  box.style.display = 'block';
+}
+
+// ── Render results ──────────────────────────────────────────────────────────
+function renderResults(d) {
+  // Score meta
+  var meta = [
+    { label: 'Title',        value: d.title },
+    { label: 'Composer',     value: d.composer },
+    { label: 'Opus',         value: d.opus || '\u2014' },
+    { label: 'Duration',     value: fmt(d.duration_seconds) },
+    { label: 'Notes',        value: d.notes.length.toLocaleString() },
+    { label: 'Instruments',  value: d.instruments.length },
+    { label: 'Tempo events', value: d.tempo_events.length },
+    { label: 'Dyn. spans',   value: d.dynamic_spans.length }
+  ];
+  document.getElementById('meta-grid').innerHTML = meta.map(function(m) {
+    return '<div class="meta-item"><div class="label">' + m.label +
+           '</div><div class="value">' + m.value + '</div></div>';
+  }).join('');
+
+  // Instruments
+  document.getElementById('inst-list').innerHTML = d.instruments.map(function(i) {
+    return '<span class="inst-tag ' + i.instrument_family + '">' + i.name + '</span>';
+  }).join('');
+
+  // Timing bars
+  var timing  = d.timing_ms || {};
+  var keys    = Object.keys(STEP_LABELS);
+  var maxStep = 1;
+  keys.forEach(function(k) { if ((timing[k] || 0) > maxStep) maxStep = timing[k]; });
+  var total   = timing.total_ms || 0;
+
+  document.getElementById('timing-table').innerHTML =
+    keys.map(function(k, i) {
+      var ms   = timing[k] || 0;
+      var pct  = (ms / Math.max(total, 1) * 100).toFixed(1);
+      var barW = (ms / maxStep * 100).toFixed(1);
+      var col  = BAR_COLORS[i % BAR_COLORS.length];
+      return '<tr>' +
+        '<td class="step-name">' + STEP_LABELS[k] + '</td>' +
+        '<td class="bar-cell" style="width:100%">' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + barW + '%;background:' + col + '"></div></div>' +
+        '</td>' +
+        '<td class="ms-val">' + ms.toFixed(1) + ' ms</td>' +
+        '<td class="ms-val" style="width:50px;color:#4a4a6a">' + pct + '%</td>' +
+        '</tr>';
+    }).join('') +
+    '<tr class="total-row">' +
+      '<td class="step-name">Total</td><td></td>' +
+      '<td class="ms-val">' + total.toFixed(1) + ' ms</td><td></td>' +
+    '</tr>';
+
+  // Sections
+  var secCard = document.getElementById('sections-card');
+  if (d.sections && d.sections.length) {
+    document.getElementById('section-list').innerHTML = d.sections.map(function(s) {
+      var key = s.harmonic_events && s.harmonic_events.length
+        ? s.harmonic_events.map(function(h) { return h.key_tonic + ' ' + h.key_mode; }).join(' \u2192 ')
+        : '\u2014';
+      var auto = s.is_auto_analyzed ? '<span class="auto-badge">auto</span>' : '';
+      return '<div class="section-item">' +
+        '<span class="sec-label">' + s.label + auto + '</span>' +
+        '<span class="sec-key">' + key + '</span>' +
+        '<span class="sec-bars">bars ' + s.start_bar + '\u2013' + s.end_bar + '</span>' +
+        '</div>';
+    }).join('');
+    secCard.style.display = 'block';
+  } else {
+    secCard.style.display = 'none';
+  }
+
+  document.getElementById('results').style.display = 'block';
+  renderJson(d);
+}
+
+// ── JSON viewer ─────────────────────────────────────────────────────────────
+var _rawJson = '';
+var _jsonCollapsed = false;
+
+function syntaxHighlight(str, searchTerm) {
+  // Escape HTML entities
+  str = str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  // Tokenise and colour: keys, strings, numbers, booleans, null
+  str = str.replace(
+    /("(?:\\.|[^"\\])*")\s*:|("(?:\\.|[^"\\])*")|(true|false)|(null)|(-?\d+(?:\.\d+)?(?:[eE][+\-]?\d+)?)/g,
+    function(match, key, str_val, bool_val, null_val, num_val) {
+      if (key      !== undefined) return '<span class="j-key">'  + key  + '</span>:';
+      if (str_val  !== undefined) return '<span class="j-str">'  + str_val  + '</span>';
+      if (bool_val !== undefined) return '<span class="j-bool">' + bool_val + '</span>';
+      if (null_val !== undefined) return '<span class="j-null">' + null_val + '</span>';
+      if (num_val  !== undefined) return '<span class="j-num">'  + num_val  + '</span>';
+      return match;
+    }
+  );
+
+  // Highlight search term
+  if (searchTerm) {
+    var escaped = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    str = str.replace(new RegExp('(' + escaped + ')', 'gi'), '<span class="j-hl">$1</span>');
+  }
+  return str;
+}
+
+function renderJson(data) {
+  _rawJson = JSON.stringify(data, null, 2);
+  var search = document.getElementById('json-search').value.trim();
+  document.getElementById('json-pre').innerHTML = syntaxHighlight(_rawJson, search);
+}
+
+document.getElementById('copy-btn').addEventListener('click', function() {
+  navigator.clipboard.writeText(_rawJson).then(function() {
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+  });
+});
+
+document.getElementById('toggle-btn').addEventListener('click', function() {
+  var pre = document.getElementById('json-pre');
+  var btn = document.getElementById('toggle-btn');
+  _jsonCollapsed = !_jsonCollapsed;
+  pre.style.display = _jsonCollapsed ? 'none' : 'block';
+  btn.textContent = _jsonCollapsed ? 'Expand' : 'Collapse';
+});
+
+document.getElementById('json-search').addEventListener('input', function() {
+  if (_rawJson) renderJson(JSON.parse(_rawJson));
+});
+</script>
+</body>
+</html>

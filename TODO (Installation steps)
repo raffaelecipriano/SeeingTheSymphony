@@ -1,0 +1,62 @@
+testing component by component is exactly the right approach. Here's the step-by-step sequence:
+
+Step 1 — Create and activate a virtual environment
+In the VS Code terminal, navigate to your project folder and run:
+bashcd seeing-the-symphony
+
+python -m venv venv
+Then activate it:
+bash# Windows
+
+    venv\Scripts\activate
+
+# Mac/Linux
+source venv/bin/activate
+You should see (venv) appear at the start of your terminal prompt. This means you're in the isolated environment for this project.
+
+Step 2 — Install dependencies
+
+    bashpip install -r requirements.txt
+
+Watch for any errors here. If a package fails to install, that's your first thing to fix before moving on.
+
+Step 3 — Test the parser in isolation first
+Before starting the server, verify the parser itself works on its own. In the VS Code terminal:
+
+    bashpython -c "from backend.parser import ScoreData; print('Parser imported OK')"
+
+The exact import path will depend on how Claude Code structured the folders — adjust accordingly. If it imports without errors, the parser module is healthy.
+
+Step 4 — Run the FastAPI server
+bashuvicorn backend.main:app --reload
+Again the exact path depends on your folder structure — Claude Code may have named it differently. Look for a file called main.py in the backend folder. The --reload flag means the server restarts automatically when you save changes.
+You should see something like:
+INFO:     Uvicorn running on http://127.0.0.1:8000
+INFO:     Application startup complete.
+
+Step 5 — Open the FastAPI docs UI
+Open your browser and go to:
+http://localhost:8000/docs
+You should see the interactive Swagger UI with your POST /parse endpoint listed. This confirms the server is running and the endpoint is registered.
+
+Step 6 — Upload a test file via the docs UI
+
+Click on POST /parse
+Click Try it out
+Click Choose File and select your Bach chorale MusicXML test fixture
+Click Execute
+Scroll down to see the response
+
+If you get a JSON response with notes, instruments, and sections — Phase 1 is working.
+
+Step 7 — Run the test script
+bashpython test_parse.py
+You should see something like:
+Title: BWV 227 - Jesu meine Freude
+Composer: J.S. Bach
+Instruments: 4
+Notes: 312
+Sections: 3
+Tempo events: 1
+Duration: 87.4 seconds
+All checks passed.

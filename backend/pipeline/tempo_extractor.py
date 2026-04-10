@@ -31,21 +31,29 @@ def _bpm_from_label(label: str) -> float:
     return 120.0
 
 
-def _beat_unit_from_referent(referent) -> BeatUnitEnum:
+def _beat_unit_from_referent(referent) -> tuple[BeatUnitEnum, bool]:
+    """
+    Returns (BeatUnitEnum, defaulted).
+    defaulted=True means we fell back to QUARTER because the referent was
+    absent or raised a non-uniform-beat-unit error.
+    """
     if referent is None:
-        return BeatUnitEnum.QUARTER
-    ql = float(referent.quarterLength)
+        return BeatUnitEnum.QUARTER, True
+    try:
+        ql = float(referent.quarterLength)
+    except Exception:
+        return BeatUnitEnum.QUARTER, True
     if ql == 1.0:
-        return BeatUnitEnum.QUARTER
+        return BeatUnitEnum.QUARTER, False
     elif ql == 2.0:
-        return BeatUnitEnum.HALF
+        return BeatUnitEnum.HALF, False
     elif ql == 0.5:
-        return BeatUnitEnum.EIGHTH
+        return BeatUnitEnum.EIGHTH, False
     elif abs(ql - 1.5) < 0.01:
-        return BeatUnitEnum.DOTTED_QUARTER
+        return BeatUnitEnum.DOTTED_QUARTER, False
     elif abs(ql - 3.0) < 0.01:
-        return BeatUnitEnum.DOTTED_HALF
-    return BeatUnitEnum.QUARTER
+        return BeatUnitEnum.DOTTED_HALF, False
+    return BeatUnitEnum.QUARTER, True
 
 
 def ql_to_seconds(ql_offset: float, boundaries: list) -> float:
@@ -122,22 +130,27 @@ def extract_tempo_events(score: music21.stream.Score, boundaries: list) -> list[
 
         # Resolve BPM
         if mm.number is not None and mm.number > 0:
-            bpm = float(mm.getQuarterBPM())
-            is_auto = False
+            try:
+                bpm = float(mm.getQuarterBPM())
+                is_auto = False
+            except Exception:
+                bpm = _bpm_from_label(mm.text or "")
+                is_auto = True
         else:
             bpm = _bpm_from_label(mm.text or "")
             is_auto = True
 
+        beat_unit, unit_defaulted = _beat_unit_from_referent(mm.referent)
         events.append(TempoEvent(
             tempo_event_id=f"tempo_{idx}",
             bar=bar,
             beat=beat,
             time_onset=time_onset,
             bpm=bpm,
-            beat_unit=_beat_unit_from_referent(mm.referent),
+            beat_unit=beat_unit,
             transition_type=TransitionTypeEnum.IMMEDIATE,
             notation_label=mm.text,
-            is_auto_analyzed=is_auto,
+            is_auto_analyzed=is_auto or unit_defaulted,
         ))
 
     return sorted(events, key=lambda e: e.time_onset)
@@ -146,18 +159,23 @@ def extract_tempo_events(score: music21.stream.Score, boundaries: list) -> list[
 def tempo_event_from_m21(mm, idx: int, time_onset: float, bar: int, beat: int) -> TempoEvent:
     """Construct a TempoEvent from a music21 MetronomeMark (used by the classmethod)."""
     if mm.number is not None and mm.number > 0:
-        bpm = float(mm.getQuarterBPM())
-        is_auto = False
+        try:
+            bpm = float(mm.getQuarterBPM())
+            is_auto = False
+        except Exception:
+            bpm = _bpm_from_label(mm.text or "")
+            is_auto = True
     else:
         bpm = _bpm_from_label(mm.text or "")
         is_auto = True
+    beat_unit, unit_defaulted = _beat_unit_from_referent(mm.referent)
     return TempoEvent(
         tempo_event_id=f"tempo_{idx}",
         bar=bar, beat=beat,
         time_onset=time_onset,
         bpm=bpm,
-        beat_unit=_beat_unit_from_referent(mm.referent),
+        beat_unit=beat_unit,
         transition_type=TransitionTypeEnum.IMMEDIATE,
         notation_label=mm.text,
-        is_auto_analyzed=is_auto,
+        is_auto_analyzed=is_auto or unit_defaulted,
     )

@@ -319,6 +319,8 @@ class ScoreData(BaseModel):
     dynamic_spans: List[DynamicSpan] = Field(default_factory=list, description="Sorted by time_onset")
     tempo_events: List[TempoEvent] = Field(default_factory=list, description="Sorted by time_onset")
     collision_clusters: List[CollisionCluster] = Field(default_factory=list, description="Empty at parse time; populated by Collision Resolver")
+    timing_ms: Optional[Dict[str, float]] = Field(default=None, description="Per-step pipeline durations in milliseconds (populated by parse pipeline)")
+    non_uniform_beat_bars: List[int] = Field(default_factory=list, description="Bar numbers where beat unit was non-uniform and defaulted to QUARTER; conductor should review")
 
     def get_instrument(self, instrument_id: str) -> Optional[InstrumentMeta]:
         for inst in self.instruments:
@@ -365,7 +367,8 @@ class ScoreData(BaseModel):
         return validate_score_data(self)
 
     @classmethod
-    def from_xml(cls, path: str, file_bytes: Optional[bytes] = None) -> "ScoreData":
+    def from_xml(cls, path: str, file_bytes: Optional[bytes] = None,
+                 stage_callback=None) -> "ScoreData":
         """
         Classmethod. Orchestrates the full parse pipeline:
         Score Parser → Harmonic Analyzer → Phrase Segmenter →
@@ -373,4 +376,4 @@ class ScoreData(BaseModel):
         Hash Check → Shape Variant Pre-pass → Validate
         """
         from ..pipeline.score_parser import parse_musicxml
-        return parse_musicxml(path, file_bytes)
+        return parse_musicxml(path, file_bytes, stage_callback=stage_callback)
